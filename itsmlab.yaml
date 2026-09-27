@@ -1,0 +1,7 @@
+# itsmlab.yaml - read by the checker (itsmlab) and by the wrappers itsmlab.sh / itsmlab.ps1.
+lab: 1                                   # the lab this repository is currently submitting
+baselines: {}                            # from Lab 2 on: per earlier lab, "student" (no checkpoint is published)
+repository: "<owner>/<repo>"             # your public GitHub repository, e.g. "jkowalski/itsm-svcdesk"
+submissions_repo: swasik/itsm-2026-submissions
+checker_image: ghcr.io/swasik/itsmlab:2026  # the course tag: leave it; a checker update is `docker pull` of this tag
+                                            # (the grader alone pins a digest and records it in every grade)

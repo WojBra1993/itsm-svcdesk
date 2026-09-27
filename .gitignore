@@ -1,0 +1,9 @@
+# checker output ("itsmlab verify 1 --json report.json" writes it into the repository root)
+report.json
+# Python
+__pycache__/
+*.pyc
+.venv/
+# local data: use a named volume in docker-compose.yml, never a bind mount
+data/
+*.db

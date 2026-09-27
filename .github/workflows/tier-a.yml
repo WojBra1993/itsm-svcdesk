@@ -1,0 +1,128 @@
+# Tier A on every push: runs the published checker against this repository and publishes report.json.
+# It uses no secrets: the checker image is public and the report contains only this repository's results.
+# The image is the course tag from itsmlab.yaml (ghcr.io/swasik/itsmlab:2026): runners pull it fresh on every
+# job, so a checker update reaches this workflow without any change here.
+# Tier A runs are advisory and unlimited (they never count as attempts). Grades come from Tier B, which
+# runs on the tag you receipted through the submissions issue form (see the course README).
+name: tier-a
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # "true" only on the main branch of the course template, which holds no service: there the checker must
+      # fail every Core spec, and the job is green when it fails exactly that way. Always "false" in your repository.
+      TEMPLATE_SKELETON: ${{ github.repository == 'swasik/itsm-2026-template' && github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: Read lab and checker image from itsmlab.yaml
+        id: cfg
+        run: |
+          lab="$(sed -n 's/^lab:[[:space:]]*\([0-9][0-9]*\).*/\1/p' itsmlab.yaml | head -n 1)"
+          image="$(sed -n 's/^checker_image:[[:space:]]*"\{0,1\}\([^"#[:space:]]*\)"\{0,1\}.*/\1/p' itsmlab.yaml | head -n 1)"
+          if [ -z "$lab" ]; then echo "itsmlab.yaml: 'lab:' not found" >&2; exit 2; fi
+          if [ -z "$image" ]; then image="ghcr.io/swasik/itsmlab:2026"; fi
+          echo "lab=$lab" >> "$GITHUB_OUTPUT"
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+
+      - name: Run the checker (Tier A)
+        id: verify
+        continue-on-error: true
+        env:
+          LAB: ${{ steps.cfg.outputs.lab }}
+          IMAGE: ${{ steps.cfg.outputs.image }}
+        run: |
+          rm -f report.json
+          rc=0
+          docker run --rm \
+            -v "$PWD:$PWD" -w "$PWD" \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            "$IMAGE" verify "$LAB" --json report.json || rc=$?
+          echo "exit=$rc" >> "$GITHUB_OUTPUT"
+          exit "$rc"
+
+      - name: Upload report.json
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: report
+          path: report.json
+          if-no-files-found: warn
+
+      - name: Write the step summary
+        if: always()
+        env:
+          LAB: ${{ steps.cfg.outputs.lab }}
+        run: |
+          {
+            echo "## itsmlab verify $LAB"
+            echo
+            if [ ! -f report.json ]; then
+              echo "No report.json was produced: the checker stopped before running the checks (exit 2). Read the job log."
+            else
+              jq -r '
+                "**Core:** \(.summary.core.passed)/\(.summary.core.total) specs passed, \(.summary.core.skipped) skipped - "
+                  + (if .summary.core.pass then "PASS" else "FAIL" end) + "  ",
+                "**Stretch:** \(.summary.stretch.passed)/\(.summary.stretch.total) passed, \(.summary.stretch.required) required - "
+                  + (if .summary.stretch.pass then "PASS" else "not yet" end),
+                "",
+                "| Spec | Bundle | Status | Checks not passed |",
+                "|---|---|---|---|",
+                (.specs[] | "| \(.id) `\(.name)` | \(.bundle) | \(.status) | \([.checks[] | select(.status == "fail" or .status == "error") | .id] | join(", ")) |"),
+                "",
+                "Observed resolutions: C1=\(.observations.C1 // "-"), C2=\(.observations.C2 // "-"), C3=\(.observations.C3 // "-")",
+                "",
+                (.advisories[]? | "- \(.id): \(.message)"),
+                "",
+                (if ([.specs[].checks[] | select(.status == "fail" or .status == "error")] | length) > 0 then
+                   ("| Check | Name | Message |", "|---|---|---|",
+                    (.specs[].checks[] | select(.status == "fail" or .status == "error")
+                      | "| \(.id) | \(.name) | \((.message // "") | gsub("\\|"; "\\|") | gsub("\n"; " ")) |"))
+                 else "No failing checks." end)
+              ' report.json
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail the job when the checker did not exit 0
+        if: steps.verify.outcome != 'success' && env.TEMPLATE_SKELETON != 'true'
+        run: |
+          echo "itsmlab verify did not exit 0: a Core spec failed or the checker hit an error. See the step summary." >&2
+          exit 1
+
+      - name: Course template only - confirm the empty skeleton failed as expected
+        if: env.TEMPLATE_SKELETON == 'true'
+        env:
+          LAB: ${{ steps.cfg.outputs.lab }}
+          RC: ${{ steps.verify.outputs.exit }}
+        run: |
+          problems="$(
+            if [ "$RC" != "1" ]; then echo "the checker exited ${RC:-without a code}, expected 1 (Core failed)"; fi
+            if [ ! -f report.json ]; then echo "no report.json"
+            else jq -r --argjson lab "$LAB" '
+                (if .mode != "tier-a" then "mode is \(.mode), expected tier-a" else empty end),
+                (if .lab != $lab then "lab is \(.lab), expected \($lab)" else empty end),
+                (if ([.specs[] | select(.bundle == "core")] | length) == 0 then "the report has no Core specs" else empty end),
+                (.specs[] | select(.status == "pass") | "\(.id) passes on a repository with no service")
+              ' report.json || echo "report.json is not a valid report"
+            fi
+          )"
+          {
+            echo "## Course template"
+            echo
+            if [ -z "$problems" ]; then
+              echo "Expected result: the empty skeleton failed every Core spec (exit 1, a complete report, no spec passed)."
+            else
+              echo "Unexpected result on the empty skeleton:"
+              printf '%s\n' "$problems" | sed 's/^/- /'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$problems" ]; then printf '%s\n' "$problems" >&2; exit 1; fi

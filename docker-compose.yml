@@ -1,0 +1,44 @@
+# Course template - Lab 1 compose contract (API.md section 9).
+# The checker enforces: a service named exactly "svcdesk", port 8080 inside the container,
+# SVCDESK_TEST_CLOCK set, no host-path bind mounts on any service, and images that need
+# no network once built (dependencies are installed at build time, never at start).
+services:
+  svcdesk:
+    build: .                      # copy Dockerfile.example to Dockerfile, or write your own
+    ports:
+      - "8080:8080"               # recommended for local work; the checker removes it in container mode
+    environment:
+      SVCDESK_TEST_CLOCK: "1"     # required: enables the X-Test-Clock header (API.md section 8)
+    volumes:
+      - svcdesk-data:/data        # a NAMED volume is fine; "./data:/data" (a bind mount) fails check 1.02
+    # Recommended, not required: a healthcheck makes "docker compose up --wait" wait for readiness.
+    # python:3.13-slim has no curl, so this one uses Python. Adjust it if your image is not Python.
+    # healthcheck:
+    #   test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health')"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 20
+    #   start_period: 5s
+
+  # Stretch S3 (own tests): uncomment and adapt. The checker builds every image up front
+  # (docker compose --profile tests build; a tests image that does not build costs S3, never Core), then runs
+  #   docker compose --profile tests run --rm --build tests
+  # (300 s cap) and requires exit code 0 and a last stdout line "ITSMLAB-TESTS: passed=<n> failed=0" with n >= 10.
+  # As written, the runner lives at src/tests/run.py (Dockerfile.example copies src/ to /app/src, so it is
+  # importable as tests.run from /app/src); adjust command and working_dir if you keep the tests elsewhere.
+  # depends_on with condition: service_healthy needs the healthcheck above (uncomment it too); otherwise
+  # a cold run can race the service, so make your runner retry /health for a few seconds first.
+  # Like svcdesk, the tests image is built before the grader blocks egress: install everything at build time.
+  # tests:
+  #   build: .
+  #   profiles: ["tests"]
+  #   working_dir: /app/src
+  #   depends_on:
+  #     svcdesk:
+  #       condition: service_healthy
+  #   environment:
+  #     SVCDESK_URL: http://svcdesk:8080   # your tests read the service URL from this variable
+  #   command: ["python", "-m", "tests.run"]   # your runner: runs the suite, prints the ITSMLAB-TESTS line last
+
+volumes:
+  svcdesk-data:

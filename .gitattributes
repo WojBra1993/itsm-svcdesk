@@ -1,0 +1,5 @@
+# Every text file is stored and checked out with LF line endings, on every operating system.
+# Git for Windows converts to CRLF on checkout by default; the checker's git (Linux, inside the container)
+# would then see every file as modified, and `itsmlab verify` would report the commit as "(dirty)".
+# LF also keeps shell scripts and Dockerfiles you add working inside Linux containers.
+* text=auto eol=lf
