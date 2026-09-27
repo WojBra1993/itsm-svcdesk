@@ -1,0 +1,33 @@
+{
+  "spec_version": "1.0.0",
+  "window": {
+    "from": "2026-09-01T00:00:00Z",
+    "to": "2026-09-22T00:00:00Z"
+  },
+  "deployment_frequency_per_day": 2.0,
+  "change_lead_time_seconds_p50": 375643,
+  "failed_deployment_recovery_time_seconds_p50": 15786,
+  "change_fail_rate": 0.190476,
+  "deployment_rework_rate": 0.119048,
+  "counts": {
+    "deployments": 42,
+    "successful_deployments": 34,
+    "failed_deployments": 8,
+    "recovered_failures": 7,
+    "open_failures": 1,
+    "rework_deployments": 5,
+    "lead_time_pairs": 125,
+    "changes": 86
+  },
+  "anomalies": {
+    "negative_lead_time_pairs": 3,
+    "deployments_without_commits": 4,
+    "commits_never_on_main": 4,
+    "revert_chains_collapsed": 2,
+    "overlapping_incident_pairs": 11
+  },
+  "ground_truth": {
+    "changes_delivered": 65,
+    "true_change_lead_time_seconds_p50": 539452
+  }
+}

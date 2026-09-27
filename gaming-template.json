@@ -1,0 +1,7 @@
+{
+  "metric": "deployment_frequency_per_day",
+  "rule": "R-11",
+  "_comment": "Replace `before` and `after` with the full metric objects your own service returns: `before` for fixtures/events-practice.jsonl, `after` for gaming/after.jsonl, both over the published window. The checker re-derives both, so the numbers here are checked, never believed. Delete this comment.",
+  "before": {},
+  "after": {}
+}

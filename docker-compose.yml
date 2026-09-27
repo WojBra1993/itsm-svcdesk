@@ -5,3 +5,9 @@ services:
       - "8080:8080"
     environment:
       - SVCDESK_TEST_CLOCK=1
+  tests:
+    profiles: ["tests"]
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    network_mode: none

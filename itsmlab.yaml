@@ -1,5 +1,5 @@
 # itsmlab.yaml - read by the checker (itsmlab) and by the wrappers itsmlab.sh / itsmlab.ps1.
-lab: 1                                   # the lab this repository is currently submitting
+lab: 2                                   # the lab this repository is currently submitting
 baselines: {}                            # from Lab 2 on: per earlier lab, "student" (no checkpoint is published)
 repository: "WojBra1993/itsm-svcdesk"     # your public GitHub repository
 submissions_repo: swasik/itsm-2026-submissions
