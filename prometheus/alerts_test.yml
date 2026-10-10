@@ -1,0 +1,200 @@
+# ai-generated: 100% - Codex wrote synthetic counter scenarios for threshold, timing, recovery and route isolation.
+# Synthetic test data; these counters are NOT measured kb-index results.
+rule_files:
+- alerts.yml
+evaluation_interval: 1m
+tests:
+- name: 'KbAvailabilityFastBurn: first firing and preceding evaluation'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 600.00+600.00x69 42427.200+427.200x124
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 0.00+0.00x69 172.800+172.800x124
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x195
+  alert_rule_test:
+  - eval_time: 104m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 105m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts:
+    - exp_labels: &id001
+        service: svcdesk
+        slo: availability
+        severity: P1
+      exp_annotations: &id002
+        summary: 'KB search: fast error-budget burn; check svcdesk 502s and kb-index health.'
+- name: 'KbAvailabilityFastBurn: sustained burn just below threshold'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 530.8800+530.8800x179
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 69.1200+69.1200x179
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x180
+  alert_rule_test:
+  - eval_time: 60m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 120m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 180m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+- name: 'KbAvailabilityFastBurn: quiet at half burn rate'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 556.800+556.800x179
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 43.200+43.200x179
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x180
+  alert_rule_test:
+  - eval_time: 60m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 120m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 180m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+- name: 'KbAvailabilityFastBurn: recovered service clears the short window'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 600.00+600.00x9 6427.200+427.200x74 38640.000+600.00x14
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 0.00+0.00x9 172.800+172.800x74 12960.000+0.00x14
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x100
+  alert_rule_test:
+  - eval_time: 84m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts:
+    - exp_labels: *id001
+      exp_annotations: *id002
+  - eval_time: 93m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+- name: 'KbAvailabilityFastBurn: unrelated route failures are ignored'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 600.00+600.00x179
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 0.00+0.00x179
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="502"}
+    values: 0+600x180
+  alert_rule_test:
+  - eval_time: 60m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 120m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+  - eval_time: 180m
+    alertname: KbAvailabilityFastBurn
+    exp_alerts: []
+- name: 'KbAvailabilitySlowBurn: first firing and preceding evaluation'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 600.00+600.00x369 222528.00+528.00x424
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 0.00+0.00x369 72.00+72.00x424
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x795
+  alert_rule_test:
+  - eval_time: 554m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 555m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts:
+    - exp_labels: &id003
+        service: svcdesk
+        slo: availability
+        severity: P2
+      exp_annotations: &id004
+        summary: 'KB search: sustained error-budget burn; investigate dependency failures.'
+- name: 'KbAvailabilitySlowBurn: sustained burn just below threshold'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 571.200+571.200x1079
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 28.800+28.800x1079
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x1080
+  alert_rule_test:
+  - eval_time: 360m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 720m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 1080m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+- name: 'KbAvailabilitySlowBurn: quiet at half burn rate'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 582.00+582.00x1079
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 18.00+18.00x1079
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x1080
+  alert_rule_test:
+  - eval_time: 360m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 720m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 1080m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+- name: 'KbAvailabilitySlowBurn: recovered service clears the short window'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 600.00+600.00x9 6528.00+528.00x374 204600.00+600.00x39
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 0.00+0.00x9 72.00+72.00x374 27000.00+0.00x39
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="200"}
+    values: 0+600x425
+  alert_rule_test:
+  - eval_time: 384m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts:
+    - exp_labels: *id003
+      exp_annotations: *id004
+  - eval_time: 421m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+- name: 'KbAvailabilitySlowBurn: unrelated route failures are ignored'
+  interval: 1m
+  input_series:
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="200"}
+    values: 0 600.00+600.00x1079
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/kb/search",http_response_status_code="502"}
+    values: 0 0.00+0.00x1079
+  - series: http_server_request_duration_seconds_count{job="svcdesk",instance="svcdesk:8080",http_request_method="GET",http_route="/tickets/{id}",http_response_status_code="502"}
+    values: 0+600x1080
+  alert_rule_test:
+  - eval_time: 360m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 720m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []
+  - eval_time: 1080m
+    alertname: KbAvailabilitySlowBurn
+    exp_alerts: []

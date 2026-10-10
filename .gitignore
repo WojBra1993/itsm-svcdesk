@@ -1,5 +1,8 @@
 # checker output ("itsmlab verify 1 --json report.json" writes it into the repository root)
 report.json
+lab3-load*.txt
+lab3-stretch*.log
+genai/.capture-*
 # Python
 __pycache__/
 *.pyc

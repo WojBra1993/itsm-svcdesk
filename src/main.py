@@ -1,4 +1,4 @@
-# ai-generated: 100% - Gemini drafted the service; Codex corrected Lab 2 metrics, validation and event ordering.
+# ai-generated: 100% - Gemini drafted the service; Codex added Lab 2 fixes and Lab 3 monitoring integration.
 import os, uuid, datetime, zoneinfo
 from fastapi import FastAPI, Request, HTTPException, Response
 from fastapi.responses import JSONResponse
@@ -6,8 +6,11 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field
 from typing import Optional
 from .dora import MetricsError, compute_metrics, parse_instant
+from .monitoring import RequestDurationMiddleware, lifespan, router as monitoring_router
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
+app.add_middleware(RequestDurationMiddleware)
+app.include_router(monitoring_router)
 WARSAW = zoneinfo.ZoneInfo("Europe/Warsaw")
 db = {}
 

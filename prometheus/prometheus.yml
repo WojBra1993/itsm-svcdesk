@@ -1,0 +1,12 @@
+# ai-generated: 100% - Codex adapted the course scrape configuration to the completed Lab 3 rules.
+global:
+  scrape_interval: 5s
+  evaluation_interval: 15s
+
+rule_files:
+  - alerts.yml
+
+scrape_configs:
+  - job_name: svcdesk
+    static_configs:
+      - targets: ["svcdesk:8080"]
