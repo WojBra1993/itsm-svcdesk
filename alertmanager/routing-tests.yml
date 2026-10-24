@@ -1,0 +1,27 @@
+# ai-generated: 100% - Codex wrote routes for both laboratories and inhibition cases that isolate service equality.
+routes:
+  - labels: {alertname: CheckoutErrorRate, service: checkout, severity: P1}
+    receivers: [pager]
+  - labels: {alertname: CheckoutLatency, service: checkout, severity: P1}
+    receivers: [pager]
+  - labels: {alertname: CheckoutErrorWarning, service: checkout, severity: P2}
+    receivers: [chat]
+  - labels: {alertname: KbAvailabilityFastBurn, service: svcdesk, slo: availability, severity: P1}
+    receivers: [pager]
+  - labels: {alertname: KbAvailabilitySlowBurn, service: svcdesk, slo: availability, severity: P2}
+    receivers: [chat]
+  - labels: {alertname: ItsmRouteCheck, service: frontend, severity: P3}
+    receivers: [chat]
+inhibitions:
+  - source: {alertname: CheckoutErrorRate, service: checkout, severity: P1}
+    target: {alertname: CheckoutErrorWarning, service: checkout, severity: P2}
+    inhibited: true
+  - source: {alertname: CheckoutErrorRate, service: checkout, severity: P1}
+    target: {alertname: CheckoutErrorWarning, service: frontend, severity: P2}
+    inhibited: false
+  - source: {alertname: KbAvailabilityFastBurn, service: svcdesk, slo: availability, severity: P1}
+    target: {alertname: KbAvailabilitySlowBurn, service: svcdesk, slo: availability, severity: P2}
+    inhibited: true
+  - source: {alertname: UnlabelledCritical, severity: P1}
+    target: {alertname: UnlabelledWarning, severity: P2}
+    inhibited: false

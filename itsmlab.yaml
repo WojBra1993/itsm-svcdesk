@@ -1,7 +1,7 @@
 # itsmlab.yaml - read by the checker (itsmlab) and by the wrappers itsmlab.sh / itsmlab.ps1.
-lab: 3                                   # the lab this repository is currently submitting
+lab: 4                                   # the lab this repository is currently submitting
 login: "wojbra1993"                       # the GitHub account used for the submission receipt
-baselines: {}                            # from Lab 2 on: per earlier lab, "student" (no checkpoint is published)
+baselines: {lab3: student}                # continue from this repository's completed Lab 3
 repository: "WojBra1993/itsm-svcdesk"     # your public GitHub repository
 submissions_repo: swasik/itsm-2026-submissions
 checker_image: ghcr.io/swasik/itsmlab:2026  # the course tag: leave it; a checker update is `docker pull` of this tag

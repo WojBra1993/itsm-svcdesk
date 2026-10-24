@@ -1,0 +1,41 @@
+# ai-generated: 100% - Codex designed checkout symptom alerts using the course's span metrics and five-minute windows.
+groups:
+  - name: shop-symptoms
+    rules:
+      - alert: CheckoutErrorRate
+        expr: |
+          sum(rate(traces_span_metrics_calls_total{service_name="checkout",span_kind="SPAN_KIND_SERVER",status_code="STATUS_CODE_ERROR"}[5m]))
+          /
+          sum(rate(traces_span_metrics_calls_total{service_name="checkout",span_kind="SPAN_KIND_SERVER"}[5m]))
+          > 0.05
+        for: 2m
+        labels:
+          service: checkout
+          severity: P1
+        annotations:
+          summary: "Over 5% of checkout requests failed over the last five minutes."
+          description: "Check checkout and its dependencies; compare error rates with the healthy baseline."
+      - alert: CheckoutLatency
+        expr: |
+          histogram_quantile(0.99, sum by (le) (
+            rate(traces_span_metrics_duration_milliseconds_bucket{service_name="checkout",span_kind="SPAN_KIND_SERVER"}[5m])
+          )) > 2000
+        for: 2m
+        labels:
+          service: checkout
+          severity: P1
+        annotations:
+          summary: "Checkout p99 latency exceeds 2000 milliseconds."
+          description: "Inspect slow downstream calls before changing any feature flags."
+      - alert: CheckoutErrorWarning
+        expr: |
+          sum(rate(traces_span_metrics_calls_total{service_name="checkout",span_kind="SPAN_KIND_SERVER",status_code="STATUS_CODE_ERROR"}[5m]))
+          /
+          sum(rate(traces_span_metrics_calls_total{service_name="checkout",span_kind="SPAN_KIND_SERVER"}[5m]))
+          > 0.01
+        for: 3m
+        labels:
+          service: checkout
+          severity: P2
+        annotations:
+          summary: "Over 1% of checkout requests failed; investigate in chat."

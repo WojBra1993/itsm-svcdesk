@@ -1,0 +1,80 @@
+{
+  "investigator": {
+    "agent": "course agent loop agent.py; second run with numbered-hypothesis and tool-format prompt clarification",
+    "model": "qwen3:1.7b",
+    "mcp_server": "prom_mcp.py (mcp 2.2.0)",
+    "transcript": "ai-rca/second/transcript.md"
+  },
+  "hypotheses": [
+    {
+      "id": "S1",
+      "hypothesis": "The services failing or slow are checkout, frontend, frontend-proxy, and product-catalog, as indicated by the alerts and zero calls_total metrics.",
+      "component": "checkout",
+      "predicts": "(sum(rate(traces_span_metrics_calls_total{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0.001) unless on() (sum(rate(traces_span_metrics_calls_total{service_name=~\"checkout|frontend|frontend-proxy|product-catalog\",span_kind=\"SPAN_KIND_SERVER\"}[5m])) == 0)",
+      "at": "2026-10-12T07:11:00Z",
+      "result": true,
+      "verdict": "partially_correct",
+      "evidence": "Pierwszy przebieg trafnie wymienia checkout jako dotknięty incydentem, ale twierdzenie o zerowym ruchu jest błędne. O 07:11Z tempo błędów checkout wynosi 0.0082304/s, a łączny ruch czterech wymienionych usług jest dodatni. Na baseline 07:00:45Z predykcja jest pusta. Lista usług pochodzi głównie z alertów, a nie z samodzielnej analizy przyczyn. W tym wpisie oceniam checkout; nie twierdzę, że każdy wymieniony komponent jest źródłem usterki."
+    },
+    {
+      "id": "S2",
+      "hypothesis": "The most likely cause is that these services are experiencing backend issues, such as misconfigurations, external latency, or unhandled errors, leading to no incoming requests (calls_total=0) and no duration data (duration_milliseconds_bucket=0).",
+      "component": "checkout",
+      "predicts": "sum(rate(traces_span_metrics_calls_total{service_name=~\"checkout|frontend|frontend-proxy|product-catalog\",span_kind=\"SPAN_KIND_SERVER\"}[5m])) == 0",
+      "at": "2026-10-12T07:11:00Z",
+      "result": false,
+      "verdict": "hallucinated",
+      "evidence": "Pierwszy przebieg wywodzi backendowe problemy z rzekomego braku ruchu. Predykcja jest pusta, bo suma SERVER request rates czterech nazwanych usług o 07:11Z jest dodatnia. Istnieją też niezerowe liczniki histogramu. Nie wykluczam każdej błędnej konfiguracji; odrzucam mierzalne twierdzenie o braku żądań i danych, na którym model oparł ten wniosek. W transkrypcie jest również zapytanie do roku 2023, poza oknem nagrania."
+    },
+    {
+      "id": "S3",
+      "hypothesis": "The alert \"ShopCheckoutErrors\" indicates a critical issue in the checkout service with high error counts in the duration histogram.",
+      "component": "checkout",
+      "predicts": "sum(traces_span_metrics_duration_milliseconds_count{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}) > 0",
+      "at": "2026-10-12T07:11:00Z",
+      "result": true,
+      "verdict": "correct",
+      "evidence": "Drugi przebieg trafnie wskazuje błędy checkout: licznik histogramu dla ERROR wynosi 2 o 07:11Z, a na baseline nie ma serii błędów przy istniejącym ruchu. Alert ma priorytet P1. Potwierdzam wystąpienie błędów, a nie precyzję słowa high, dla którego model nie podał progu. Model nie wyliczył udziału ani tempa błędów; sam surowy licznik nie jest tymi wielkościami."
+    },
+    {
+      "id": "S4",
+      "hypothesis": "The alert \"ShopServiceErrors\" suggests a major issue in the shop service, particularly in the frontend-proxy and product-catalog services, with frequent long durations.",
+      "component": "product-catalog",
+      "predicts": "(histogram_quantile(0.99,sum by(le)(rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"frontend-proxy\",span_kind=\"SPAN_KIND_SERVER\"}[5m]))) > 100) and on() (histogram_quantile(0.99,sum by(le)(rate(traces_span_metrics_duration_milliseconds_bucket{service_name=\"product-catalog\",span_kind=\"SPAN_KIND_SERVER\"}[5m]))) > 100)",
+      "at": "2026-10-12T07:11:00Z",
+      "result": false,
+      "verdict": "hallucinated",
+      "evidence": "Twierdzenie łączy frontend-proxy i product-catalog jako usługi z częstymi długimi odpowiedziami. Frontend-proxy rzeczywiście zwalnia, lecz p99 product-catalog o 07:11Z pozostaje poniżej 10 ms, nie powyżej 100 ms. Koniunkcja jest więc pusta: ten wspólny opis obu usług nie pasuje do danych. Alarm ShopServiceErrors dotyczy błędów; sam nie dowodzi opóźnienia katalogu."
+    },
+    {
+      "id": "S5",
+      "hypothesis": "The pending alerts in the shop system likely stem from unprocessed span metrics showing high error rates in the checkout and product-catalog services.",
+      "component": "product-catalog",
+      "predicts": "(sum(rate(traces_span_metrics_calls_total{service_name=\"product-catalog\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0.05) unless on() (sum(otelcol_exporter_queue_size{data_type=\"metrics\"}) > sum(otelcol_exporter_queue_size{data_type=\"metrics\"} @ 1791788445))",
+      "at": "2026-10-12T07:11:00Z",
+      "result": true,
+      "verdict": "partially_correct",
+      "evidence": "W katalogu występuje 0.148950 błędu/s o 07:11Z; na baseline brak błędów. Kolejka eksportera metryk ma 1 element z pojemności 1000, dokładnie tyle samo co na baseline. Nie ma wzrostu tego zalegania, który wspierałby nowe wyjaśnienie awarii nieprzetworzonymi metrykami. Predykcja rozdziela rzeczywisty błąd od zaproponowanego mechanizmu kolejki. Nie utożsamiam pending z brakiem przetworzenia: stan pending wynika również z okresu for reguły."
+    },
+    {
+      "id": "S6",
+      "hypothesis": "The duration histogram for the checkout service shows a significant number of errors in the 100-300ms bucket, indicating potential latency or blocking issues.",
+      "component": "checkout",
+      "predicts": "(sum(traces_span_metrics_duration_milliseconds_bucket{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\",le=\"+Inf\"}) - sum(traces_span_metrics_duration_milliseconds_bucket{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\",le=\"100\"})) > 0",
+      "at": "2026-10-12T07:11:00Z",
+      "result": false,
+      "verdict": "hallucinated",
+      "evidence": "O 07:11Z licznik błędów SERVER checkout w +Inf i le=100 jest taki sam: 2. Powyżej 100 ms jest więc 0 błędów, co wyklucza postulowane błędy w 100–300 ms. W histogramie nie istnieje granica 300 ms (są 200 i 400); nie tworzę fikcyjnego le=300. Użyta różnica sprawdza warunek konieczny twierdzenia na istniejących seriach."
+    },
+    {
+      "id": "S7",
+      "hypothesis": "The product-catalog service's span metrics show a spike in errors in the 50-100ms bucket, suggesting possible backend contention or configuration issues.",
+      "component": "product-catalog",
+      "predicts": "(sum(traces_span_metrics_duration_milliseconds_bucket{service_name=\"product-catalog\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\",le=\"100\"}) - sum(traces_span_metrics_duration_milliseconds_bucket{service_name=\"product-catalog\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\",le=\"50\"})) > 0",
+      "at": "2026-10-12T07:11:00Z",
+      "result": false,
+      "verdict": "hallucinated",
+      "evidence": "O 07:11Z oba kumulacyjne liczniki błędów katalogu le=50 i le=100 są równe 38. Ich różnica dla przedziału (50,100] ms wynosi 0. Błędy GetProduct istnieją, ale nie w przedziale wskazanym przez model. Sama obecność błędu nie potwierdza blokowania backendu ani błędu konfiguracji."
+    }
+  ]
+}

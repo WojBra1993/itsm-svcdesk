@@ -1,0 +1,76 @@
+services:
+  prepare-recording:
+    image: python:3.13-slim
+    volumes:
+      - ${LAB4_REPO}/incident:/source:ro
+      - recording:/data
+    command:
+      - python
+      - -c
+      - |
+        import hashlib, pathlib, tarfile
+        archive = pathlib.Path('/source/tsdb-snapshot.tar.gz')
+        root = pathlib.Path('/data')
+        marker = root / '.source-sha256'
+        digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+        if marker.exists():
+            assert marker.read_text() == digest, 'Recording changed: use a separate recording volume.'
+        else:
+            assert not any(root.iterdir()), 'Recording volume is non-empty without a source checksum.'
+            with tarfile.open(archive) as tf:
+                tf.extractall(root, filter='data')
+            marker.write_text(digest)
+        root.chmod(0o777)
+  recording:
+    image: prom/prometheus:v3.15.0
+    depends_on:
+      prepare-recording:
+        condition: service_completed_successfully
+    volumes:
+      - recording:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=100y
+    healthcheck:
+      test: ["CMD", "promtool", "check", "ready", "--url=http://localhost:9090"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  ollama:
+    image: ollama/ollama:0.40.2
+    environment:
+      OLLAMA_CONTEXT_LENGTH: "8192"
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_KEEP_ALIVE: "0"
+    volumes:
+      - models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+  investigator:
+    profiles: ["investigate"]
+    build:
+      context: ${LAB4_PACKAGE}/agent
+      dockerfile: ${LAB4_REPO}/scripts/lab4-ai/Dockerfile
+    environment:
+      BASE_URL: http://ollama:11434/v1
+      API_KEY: ollama
+      MODEL: qwen3:1.7b
+      PROMETHEUS_URL: http://recording:9090
+      TRANSCRIPT: /output/transcript.md
+      MAX_STEPS: "4"
+    volumes:
+      - ${LAB4_REPO}/ai-rca/second:/output
+    command:
+      - python
+      - run_investigation.py
+      - "Checkout errors paged at 07:09:19Z on 2026-10-12. Investigate 07:00:00Z to 07:14:45Z on that date. What is the cause? Gather evidence through the tools and state at least three distinct falsifiable hypotheses as separate sentences. Distinguish measured observations from untested explanations."
+volumes:
+  recording:
+  models:

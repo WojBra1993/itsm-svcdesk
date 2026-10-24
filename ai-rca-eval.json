@@ -1,0 +1,50 @@
+{
+  "investigator": {
+    "agent": "course agent loop agent.py (course recording)",
+    "model": "qwen3:4b-instruct",
+    "mcp_server": "prom_mcp.py (mcp 2.2.0)",
+    "transcript": "ai-rca/transcript.md"
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "hypothesis": "The checkout error is directly tied to failed requests in the `oteldemo.CheckoutService/PlaceOrder` span, as it shows a consistent count of 2 erroneous calls from 07:00Z to 07:20Z.",
+      "component": "checkout",
+      "predicts": "(sum(rate(traces_span_metrics_calls_total{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0.001) unless on() (min(min_over_time(traces_span_metrics_calls_total{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}[10m])) == 2)",
+      "at": "2026-10-12T07:11:00Z",
+      "result": true,
+      "verdict": "partially_correct",
+      "evidence": "O 07:11:00Z checkout ma 0.0082304 błędu/s i licznik 2. Błędy są rzeczywiste, lecz model błędnie opisuje cały przedział jako stały licznik 2: surowa próbka o 07:07:17.778Z ma 0, dopiero 07:08:17.779Z ma 2. Predykcja rozdziela obecność błędów od fałszywego opisu czasu; minimum licznika w oknie wynosi 0. O 07:00:45Z występuje ruch 0.112500/s, bez serii błędów; predykcja jest pusta."
+    },
+    {
+      "id": "H2",
+      "hypothesis": "The error originates from downstream failures in `oteldemo.ProductCatalogService/GetProduct`, which may be causing the checkout service to fail during order placement.",
+      "component": "product-catalog",
+      "predicts": "sum(rate(traces_span_metrics_calls_total{service_name=\"product-catalog\",span_kind=\"SPAN_KIND_SERVER\",span_name=\"oteldemo.ProductCatalogService/GetProduct\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0.05",
+      "at": "2026-10-12T07:11:00Z",
+      "result": true,
+      "verdict": "correct",
+      "evidence": "O 07:11:00Z GetProduct zwraca 0.148950 błędu/s; o 07:00:45Z brak serii błędów przy rzeczywistym ruchu katalogu 2.062491/s. Błędy CLIENT w checkout dla GetProduct mają 0.0082304/s, tyle samo co błędy SERVER PlaceOrder. To wspiera propagację błędów katalogu do checkout; bez śladów nie przypisuję pojedynczych spanów do konkretnych zamówień."
+    },
+    {
+      "id": "H3",
+      "hypothesis": "The error is likely propagated from a failing `PaymentService/Charge` step in the checkout flow, as payment failures commonly cause user checkout errors.",
+      "component": "payment",
+      "predicts": "sum(rate(traces_span_metrics_calls_total{service_name=\"payment\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0",
+      "at": "2026-10-12T07:11:00Z",
+      "result": false,
+      "verdict": "hallucinated",
+      "evidence": "Predykcja o 07:11:00Z jest pusta. Payment ma wtedy 0.125 poprawnie obsługiwanych wywołań/s i nie ma serii ERROR; sprawdzono istniejący service_name oraz metrykę, a nie wymyśloną nazwę. Dane wskazują błędy GetProduct, nie Charge. Popularność awarii płatności nie jest dowodem w tym incydencie."
+    },
+    {
+      "id": "H4",
+      "hypothesis": "A system-wide spike in errors could be due to high load or a resource bottleneck, inferred from the error counts growing steadily over the 20-minute window.",
+      "component": "checkout",
+      "predicts": "(sum(rate(traces_span_metrics_calls_total{service_name=\"checkout\",span_kind=\"SPAN_KIND_SERVER\",status_code=\"STATUS_CODE_ERROR\"}[5m])) > 0.001) unless on() (sum(rate(traces_span_metrics_calls_total{service_name=\"frontend\",span_kind=\"SPAN_KIND_SERVER\"}[5m])) / sum(rate(traces_span_metrics_calls_total{service_name=\"frontend\",span_kind=\"SPAN_KIND_SERVER\"}[5m] @ 1791788445)) > 2)",
+      "at": "2026-10-12T07:11:00Z",
+      "result": true,
+      "verdict": "partially_correct",
+      "evidence": "Trafna jest obserwacja błędów checkout: 0.0082304/s o 07:11:00Z, bez takich błędów na baseline 07:00:45Z. Argument o gwałtownym obciążeniu nie znajduje potwierdzenia: ruch frontend wynosi 4.045009/s wobec 4.258316/s, czyli 0.949908 baseline, a nie wzrost ponad dwukrotny. Licznik błędów checkout pozostaje równy 2 po 07:08:17Z; nie rośnie stale przez 20 minut. Predykcja oddziela błąd od postulowanego skoku ruchu. Nie wyklucza każdej możliwej presji zasobów; model jej nie zmierzył, więc nie uznaję tego ogólnego wyjaśnienia za ustaloną przyczynę."
+    }
+  ]
+}
