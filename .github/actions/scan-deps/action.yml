@@ -1,0 +1,126 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The deps job (CI-SPEC.md P-04). Three reports that never fail - Trivy fs (vulnerabilities and
+# secrets), Grype and OSV-Scanner write trivy.sarif, grype.sarif and osv-scanner.sarif - then the upload of the three as
+# artifact `sarif-deps`, and only then the gate: Trivy fs, vulnerabilities, HIGH or CRITICAL, .trivyignore applied. A red
+# gate therefore still leaves its SARIF, which the canary run needs.
+#
+# Each scanner is its official image, pinned by tag and digest in the inputs below (the one place for each pin; Trivy
+# is pinned again in ../image/action.yml - keep the two equal). Containers run as the runner's user, so every file
+# they write belongs to the job; the repository is mounted read-only at /src; SARIF goes to $RUNNER_TEMP/sarif-deps;
+# the Trivy and Grype databases are cached per UTC day. Grype and OSV-Scanner read only package manifests. Trivy runs
+# with --config trivy.yaml of this action (empty), so a trivy.yaml in the repository cannot change the gate.
+name: scan-deps
+description: Trivy fs, Grype and OSV-Scanner on the repository; SARIF artifact sarif-deps; gate on Trivy HIGH/CRITICAL
+
+inputs:
+  trivy-image:
+    description: Trivy image, tag and digest
+    default: aquasec/trivy:0.74.0@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969
+  grype-image:
+    description: Grype image, tag and digest
+    default: anchore/grype:v0.119.0@sha256:8c2c9234a345577a6d321a4753aa3ee1276d8975c8452d2344a56b57733ecad3
+  osv-scanner-image:
+    description: OSV-Scanner image, tag and digest
+    default: ghcr.io/google/osv-scanner:v2.6.0@sha256:afd838850ac1a0fcc15ff4a041dc9ba11123c3f0d2666217a5f0fcf9222b55fa
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare the output and cache directories
+      id: prep
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/sarif-deps" "$RUNNER_TEMP/trivy-cache/db" "$RUNNER_TEMP/grype-cache"
+        echo "day=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+
+    - name: Restore the Trivy database (cached per UTC day)
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ runner.temp }}/trivy-cache/db
+        key: trivy-db-${{ steps.prep.outputs.day }}
+
+    - name: Restore the Grype database (cached per UTC day)
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ runner.temp }}/grype-cache
+        key: grype-db-${{ steps.prep.outputs.day }}
+
+    - name: Trivy fs, vulnerabilities and secrets (report) -> trivy.sarif
+      shell: bash
+      env:
+        TRIVY_IMAGE: ${{ inputs.trivy-image }}
+      run: |
+        # An explicit --ignorefile must exist (Trivy 0.74.0 stops otherwise); without the file nothing is ignored.
+        ignore=(--ignorefile .trivyignore)
+        if [ ! -f "$GITHUB_WORKSPACE/.trivyignore" ]; then ignore=(); fi
+        # --skip-files: bakeoff/sarif/*.sarif and bakeoff/transcript.md quote the canary's secrets; they are evidence.
+        rc=0
+        docker run --rm --user "$(id -u):$(id -g)" \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$GITHUB_ACTION_PATH:/action:ro" \
+          -v "$RUNNER_TEMP/trivy-cache:/cache" \
+          -v "$RUNNER_TEMP/sarif-deps:/out" \
+          "$TRIVY_IMAGE" fs --config /action/trivy.yaml --cache-dir /cache --scanners vuln,secret \
+          --skip-files 'bakeoff/sarif/*.sarif' --skip-files bakeoff/transcript.md "${ignore[@]}" \
+          --format sarif --output /out/trivy.sarif . || rc=$?
+        if [ ! -s "$RUNNER_TEMP/sarif-deps/trivy.sarif" ]; then
+          echo "::warning title=trivy.sarif missing::Trivy exited $rc and wrote no SARIF; read the log of this step"
+        fi
+
+    - name: Grype dir (report) -> grype.sarif
+      shell: bash
+      env:
+        GRYPE_IMAGE: ${{ inputs.grype-image }}
+      run: |
+        # Grype needs a writable TMPDIR as a non-root user: the tmpfs, world-writable like a normal /tmp.
+        rc=0
+        docker run --rm --user "$(id -u):$(id -g)" --tmpfs /tmp:mode=1777 \
+          -e GRYPE_DB_CACHE_DIR=/cache -e GRYPE_CHECK_FOR_APP_UPDATE=false \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$RUNNER_TEMP/grype-cache:/cache" \
+          -v "$RUNNER_TEMP/sarif-deps:/out" \
+          "$GRYPE_IMAGE" dir:. -o sarif=/out/grype.sarif || rc=$?
+        if [ ! -s "$RUNNER_TEMP/sarif-deps/grype.sarif" ]; then
+          echo "::warning title=grype.sarif missing::Grype exited $rc and wrote no SARIF; read the log of this step"
+        fi
+
+    - name: OSV-Scanner (report) -> osv-scanner.sarif
+      shell: bash
+      env:
+        OSV_SCANNER_IMAGE: ${{ inputs.osv-scanner-image }}
+      run: |
+        # --no-resolve: without it the transitive resolution of manifests takes about 100 s. Exit 1 means "found
+        # vulnerabilities" and 128 "found no packages": both are results, the step never fails on them.
+        rc=0
+        docker run --rm --user "$(id -u):$(id -g)" --tmpfs /tmp:mode=1777 -e HOME=/tmp \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$RUNNER_TEMP/sarif-deps:/out" \
+          "$OSV_SCANNER_IMAGE" scan source -r --no-resolve \
+          --format sarif --output-file /out/osv-scanner.sarif /src || rc=$?
+        if [ ! -s "$RUNNER_TEMP/sarif-deps/osv-scanner.sarif" ]; then
+          echo "::warning title=osv-scanner.sarif missing::OSV-Scanner exited $rc and wrote no SARIF; read the log of this step"
+        fi
+
+    - name: Upload trivy.sarif, grype.sarif, osv-scanner.sarif (artifact sarif-deps)
+      if: always()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: sarif-deps
+        path: ${{ runner.temp }}/sarif-deps/*.sarif
+        if-no-files-found: warn
+
+    - name: Gate - Trivy fs, HIGH or CRITICAL vulnerabilities, .trivyignore applied
+      shell: bash
+      env:
+        TRIVY_IMAGE: ${{ inputs.trivy-image }}
+      run: |
+        ignore=(--ignorefile .trivyignore)
+        if [ ! -f "$GITHUB_WORKSPACE/.trivyignore" ]; then ignore=(); fi
+        # --skip-files: bakeoff/sarif/*.sarif and bakeoff/transcript.md quote the canary's secrets; they are evidence.
+        docker run --rm --user "$(id -u):$(id -g)" \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$GITHUB_ACTION_PATH:/action:ro" \
+          -v "$RUNNER_TEMP/trivy-cache:/cache" \
+          "$TRIVY_IMAGE" fs --config /action/trivy.yaml --cache-dir /cache --scanners vuln \
+          --severity HIGH,CRITICAL --exit-code 1 \
+          --skip-files 'bakeoff/sarif/*.sarif' --skip-files bakeoff/transcript.md "${ignore[@]}" .

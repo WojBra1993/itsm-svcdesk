@@ -1,0 +1,45 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The code job: Semgrep Community Edition with the registry's p/default rules writes
+# semgrep.sarif and never fails the build (CI-SPEC.md P-04); the file is uploaded as artifact `sarif-code`.
+#
+# The rules are fetched from the Semgrep registry at run time and never copied into a repository (the Semgrep Rules
+# License forbids redistributing them); --metrics=off sends no usage data. With a .git directory present Semgrep scans
+# only the files git tracks. The image is pinned by tag and digest below; the container runs as the runner's user
+# with HOME on a tmpfs, and the repository is mounted read-only.
+name: scan-code
+description: Semgrep p/default on the repository; SARIF artifact sarif-code; never fails
+
+inputs:
+  semgrep-image:
+    description: Semgrep image, tag and digest
+    default: semgrep/semgrep:1.178.0@sha256:32e459968daabe7ab86968184a29109b9564aa00392401156f9788452b42786b
+
+runs:
+  using: composite
+  steps:
+    - name: Semgrep p/default (report) -> semgrep.sarif
+      shell: bash
+      env:
+        SEMGREP_IMAGE: ${{ inputs.semgrep-image }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/sarif-code"
+        # --exclude: bakeoff/sarif/*.sarif and bakeoff/transcript.md quote the canary's code and secrets; they are
+        # evidence, not code.
+        rc=0
+        docker run --rm --user "$(id -u):$(id -g)" --tmpfs /tmp:mode=1777 -e HOME=/tmp \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$RUNNER_TEMP/sarif-code:/out" \
+          "$SEMGREP_IMAGE" semgrep scan --config p/default --metrics=off --disable-version-check \
+          --exclude 'bakeoff/sarif/*.sarif' --exclude bakeoff/transcript.md \
+          --sarif --output /out/semgrep.sarif . || rc=$?
+        if [ ! -s "$RUNNER_TEMP/sarif-code/semgrep.sarif" ]; then
+          echo "::warning title=semgrep.sarif missing::Semgrep exited $rc and wrote no SARIF; read the log of this step"
+        fi
+
+    - name: Upload semgrep.sarif (artifact sarif-code)
+      if: always()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: sarif-code
+        path: ${{ runner.temp }}/sarif-code/*.sarif
+        if-no-files-found: warn

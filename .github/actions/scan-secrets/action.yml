@@ -1,0 +1,57 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The secrets job (CI-SPEC.md P-04): gitleaks in `dir` mode over the checked-out tree writes
+# gitleaks.sarif (never failing), the file is uploaded as artifact `sarif-secrets`, and only then the gate runs the same
+# scan again and fails on any finding. .gitleaksignore is applied by both runs (P-06 checks its reasons).
+#
+# `dir` mode reads the files, not the history, and --redact keeps the secret out of the log and the SARIF; the
+# checkout's persist-credentials: false keeps the job token out of .git/config, which dir mode would read.
+# gitleaks.toml next to this file extends gitleaks' default rules with a path allowlist for the committed evidence,
+# bakeoff/sarif/*.sarif and bakeoff/transcript.md, which quote the canary's secrets. --ignore-gitleaks-allow makes
+# inline `gitleaks:allow` comments count for nothing: an ignore goes to .gitleaksignore, with a reason (P-06). The
+# image is pinned by tag and digest below.
+name: scan-secrets
+description: gitleaks dir on the repository; SARIF artifact sarif-secrets; gate on any finding
+
+inputs:
+  gitleaks-image:
+    description: gitleaks image, tag and digest
+    default: ghcr.io/gitleaks/gitleaks:v8.30.1@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f
+
+runs:
+  using: composite
+  steps:
+    - name: gitleaks dir (report) -> gitleaks.sarif
+      shell: bash
+      env:
+        GITLEAKS_IMAGE: ${{ inputs.gitleaks-image }}
+      run: |
+        mkdir -p "$RUNNER_TEMP/sarif-secrets"
+        rc=0
+        docker run --rm --user "$(id -u):$(id -g)" \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$GITHUB_ACTION_PATH:/action:ro" \
+          -v "$RUNNER_TEMP/sarif-secrets:/out" \
+          "$GITLEAKS_IMAGE" dir . --config /action/gitleaks.toml --ignore-gitleaks-allow --redact --no-banner \
+          --report-format sarif --report-path /out/gitleaks.sarif --exit-code 0 || rc=$?
+        if [ ! -s "$RUNNER_TEMP/sarif-secrets/gitleaks.sarif" ]; then
+          echo "::warning title=gitleaks.sarif missing::gitleaks exited $rc and wrote no SARIF; read the log of this step"
+        fi
+
+    - name: Upload gitleaks.sarif (artifact sarif-secrets)
+      if: always()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: sarif-secrets
+        path: ${{ runner.temp }}/sarif-secrets/*.sarif
+        if-no-files-found: warn
+
+    - name: Gate - gitleaks, any secret in the tree
+      shell: bash
+      env:
+        GITLEAKS_IMAGE: ${{ inputs.gitleaks-image }}
+      run: |
+        docker run --rm --user "$(id -u):$(id -g)" \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$GITHUB_ACTION_PATH:/action:ro" \
+          "$GITLEAKS_IMAGE" dir . --config /action/gitleaks.toml --ignore-gitleaks-allow --redact --no-banner \
+          --verbose --exit-code 1

@@ -1,0 +1,154 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The image job (CI-SPEC.md P-04 and P-09). On every branch: docker build, the gate - Trivy
+# on the built image, vulnerabilities HIGH or CRITICAL that have a fix, .trivyignore applied - and a Syft SPDX 2.3 SBOM
+# (artifact `sbom`). On main only, after the gate passed: push ghcr.io/<owner>/<repo>:<commit sha> (lower case), read
+# the pushed digest, and attest that subject twice with actions/attest - build provenance, then the SBOM - both pushed
+# to the registry next to the image. `gh attestation verify oci://ghcr.io/<owner>/<repo>@<digest> -R <owner>/<repo>`
+# then accepts it (P-09). The package starts private: make it public once, after the first push (README.md).
+#
+# The scanners never see the Docker socket: the built image is saved to a tar file that Trivy and Syft read. Both are
+# official images pinned by tag and digest (inputs below; keep the Trivy pin equal to ../scan-deps/action.yml's) and run
+# as the runner's user. The job needs packages: write, id-token: write and attestations: write (ci.yml).
+name: image
+description: Build the image, gate it on fixable HIGH/CRITICAL (Trivy), SBOM (Syft); on main push to GHCR and attest
+
+inputs:
+  context:
+    description: Docker build context, relative to the repository root
+    default: .
+  dockerfile:
+    description: Dockerfile path, relative to the repository root
+    default: Dockerfile
+  trivy-image:
+    description: Trivy image, tag and digest
+    default: aquasec/trivy:0.74.0@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969
+  syft-image:
+    description: Syft image, tag and digest
+    default: anchore/syft:v1.52.0@sha256:500e2d872ac019436926e8322b4fc1f39441d94d21f6f4046c6ff29b30e8cb02
+  registry-token:
+    description: Token that pushes to ghcr.io (the job's GITHUB_TOKEN, with packages write)
+    default: ${{ github.token }}
+
+runs:
+  using: composite
+  steps:
+    - name: Name the image
+      id: prep
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/image" "$RUNNER_TEMP/trivy-cache/db"
+        # GHCR wants lower case; the tag is the commit, the attestation subject the name without a tag.
+        name="ghcr.io/${GITHUB_REPOSITORY,,}"
+        {
+          echo "name=$name"
+          echo "local=lab5-ci-image:$GITHUB_SHA"
+          echo "day=$(date -u +%F)"
+        } >> "$GITHUB_OUTPUT"
+        echo "image name: $name"
+
+    - name: Restore the Trivy database (cached per UTC day)
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ runner.temp }}/trivy-cache/db
+        key: trivy-db-${{ steps.prep.outputs.day }}
+
+    - name: docker build
+      shell: bash
+      env:
+        BUILD_CONTEXT: ${{ inputs.context }}
+        DOCKERFILE: ${{ inputs.dockerfile }}
+        LOCAL: ${{ steps.prep.outputs.local }}
+      run: |
+        # --provenance=false: one image manifest, not an index with BuildKit's own unsigned provenance; the
+        # provenance that counts is the signed attestation below. The source label links the GHCR package to this
+        # repository.
+        docker build --provenance=false \
+          --file "$DOCKERFILE" --tag "$LOCAL" \
+          --label "org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
+          --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+          "$BUILD_CONTEXT"
+        docker save "$LOCAL" --output "$RUNNER_TEMP/image/image.tar"
+
+    - name: Gate - Trivy image, HIGH or CRITICAL with a fix, .trivyignore applied
+      shell: bash
+      env:
+        TRIVY_IMAGE: ${{ inputs.trivy-image }}
+      run: |
+        # An explicit --ignorefile must exist (Trivy 0.74.0 stops otherwise); without the file nothing is ignored.
+        ignore=(--ignorefile .trivyignore)
+        if [ ! -f "$GITHUB_WORKSPACE/.trivyignore" ]; then ignore=(); fi
+        # --config: this action's empty trivy.yaml, so a trivy.yaml in the repository cannot change the gate.
+        docker run --rm --user "$(id -u):$(id -g)" --tmpfs /tmp:mode=1777 \
+          -v "$GITHUB_WORKSPACE:/src:ro" -w /src \
+          -v "$GITHUB_ACTION_PATH:/action:ro" \
+          -v "$RUNNER_TEMP/trivy-cache:/cache" \
+          -v "$RUNNER_TEMP/image:/image:ro" \
+          "$TRIVY_IMAGE" image --config /action/trivy.yaml --cache-dir /cache --input /image/image.tar \
+          --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 "${ignore[@]}"
+
+    - name: Syft SBOM (SPDX 2.3 JSON) -> sbom.spdx.json
+      shell: bash
+      env:
+        SYFT_IMAGE: ${{ inputs.syft-image }}
+        NAME: ${{ steps.prep.outputs.name }}
+      run: |
+        docker run --rm --user "$(id -u):$(id -g)" --tmpfs /tmp:mode=1777 -e HOME=/tmp \
+          -v "$RUNNER_TEMP/image:/image" \
+          "$SYFT_IMAGE" scan docker-archive:/image/image.tar \
+          --source-name "$NAME" --source-version "$GITHUB_SHA" \
+          -o spdx-json@2.3=/image/sbom.spdx.json
+        echo "SBOM: $(wc -c < "$RUNNER_TEMP/image/sbom.spdx.json") bytes"
+
+    - name: Upload sbom.spdx.json (artifact sbom)
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: sbom
+        path: ${{ runner.temp }}/image/sbom.spdx.json
+        if-no-files-found: warn
+
+    - name: Push to GHCR (main only)
+      id: push
+      if: github.ref == 'refs/heads/main'
+      shell: bash
+      env:
+        REGISTRY_TOKEN: ${{ inputs.registry-token }}
+        LOCAL: ${{ steps.prep.outputs.local }}
+        NAME: ${{ steps.prep.outputs.name }}
+      run: |
+        printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+        docker tag "$LOCAL" "$NAME:$GITHUB_SHA"
+        docker push "$NAME:$GITHUB_SHA"
+        digest="$(docker image inspect --format '{{range .RepoDigests}}{{println .}}{{end}}' "$NAME:$GITHUB_SHA" \
+          | sed -n "s|^$NAME@||p" | head -n 1)"
+        if ! [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+          echo "::error title=No digest::could not read the pushed digest of $NAME:$GITHUB_SHA"
+          exit 1
+        fi
+        echo "digest=$digest" >> "$GITHUB_OUTPUT"
+        echo "Pushed $NAME@$digest (tag $GITHUB_SHA): the digest for TRIAGE.md (P-10)" >> "$GITHUB_STEP_SUMMARY"
+        echo "pushed $NAME@$digest"
+
+    - name: Attest the build provenance (main only)
+      if: github.ref == 'refs/heads/main'
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-name: ${{ steps.prep.outputs.name }}
+        subject-digest: ${{ steps.push.outputs.digest }}
+        push-to-registry: true
+        # Storage records exist for organisation-owned repositories only (actions/attest README); yours is personal.
+        create-storage-record: false
+
+    - name: Attest the SBOM (main only)
+      if: github.ref == 'refs/heads/main'
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-name: ${{ steps.prep.outputs.name }}
+        subject-digest: ${{ steps.push.outputs.digest }}
+        sbom-path: ${{ runner.temp }}/image/sbom.spdx.json
+        push-to-registry: true
+        create-storage-record: false
+
+    - name: Log out of GHCR (main only)
+      if: always() && github.ref == 'refs/heads/main'
+      shell: bash
+      run: docker logout ghcr.io

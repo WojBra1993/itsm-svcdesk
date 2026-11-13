@@ -1,5 +1,5 @@
 # itsmlab.yaml - read by the checker (itsmlab) and by the wrappers itsmlab.sh / itsmlab.ps1.
-lab: 4                                   # the lab this repository is currently submitting
+lab: 5                                   # the lab this repository is currently submitting
 login: "wojbra1993"                       # the GitHub account used for the submission receipt
 baselines: {lab3: student}                # continue from this repository's completed Lab 3
 repository: "WojBra1993/itsm-svcdesk"     # your public GitHub repository

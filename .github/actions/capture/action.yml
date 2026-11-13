@@ -1,0 +1,96 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The capture job (CI-SPEC.md P-25, P-26). It runs after deps, secrets and code whatever
+# they concluded, downloads their SARIF artifacts (sarif-deps, sarif-secrets, sarif-code) into sarif/, and:
+#   * on branch lab5/canary only, attests every sarif/*.sarif with actions/attest, so the reveal and the grader can
+#     check with `gh attestation verify` that the files came from this repository's run on the canary commit C;
+#   * always uploads artifact `sarif` with the five files at its root:
+#       gh run download <run id> -n sarif -D bakeoff/sarif   gives bakeoff/sarif/trivy.sarif, grype.sarif, ...;
+#   * uploads each file to code scanning (Security tab) with the tool as category; that may fail without breaking
+#     anything (continue-on-error), it is a view, not evidence.
+# It never fails the build; a missing file is a warning here and a missing scanner at the SARIF receipt.
+name: capture
+description: Bundle the scanners' SARIF as artifact sarif, attest it on lab5/canary, upload it to code scanning
+
+runs:
+  using: composite
+  steps:
+    - name: Download sarif-deps, sarif-secrets, sarif-code into sarif/
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        pattern: sarif-*
+        path: sarif
+        merge-multiple: true
+
+    - name: List the SARIF and its sha256
+      id: list
+      if: always()
+      shell: bash
+      run: |
+        found=""
+        for tool in trivy grype osv-scanner gitleaks semgrep; do
+          file="sarif/$tool.sarif"
+          if [ -s "$file" ]; then
+            echo "$(sha256sum "$file" | cut -d ' ' -f 1)  $file"
+            found="$found $tool"
+          else
+            echo "::warning title=$tool.sarif missing::$file was not produced; read the log of the job that writes it"
+          fi
+        done
+        {
+          for tool in $found; do echo "$tool=true"; done
+          if [ -n "$found" ]; then echo "any=true"; fi
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Attest sarif/*.sarif (lab5/canary only)
+      if: github.ref == 'refs/heads/lab5/canary' && steps.list.outputs.any == 'true'
+      uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      with:
+        subject-path: ${{ github.workspace }}/sarif/*.sarif
+
+    - name: Upload the five files (artifact sarif)
+      if: always()
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: sarif
+        path: sarif/*.sarif
+        if-no-files-found: warn
+
+    - name: Code scanning - trivy
+      if: always() && steps.list.outputs.trivy == 'true'
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: sarif/trivy.sarif
+        category: trivy
+
+    - name: Code scanning - grype
+      if: always() && steps.list.outputs.grype == 'true'
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: sarif/grype.sarif
+        category: grype
+
+    - name: Code scanning - osv-scanner
+      if: always() && steps.list.outputs.osv-scanner == 'true'
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: sarif/osv-scanner.sarif
+        category: osv-scanner
+
+    - name: Code scanning - gitleaks
+      if: always() && steps.list.outputs.gitleaks == 'true'
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: sarif/gitleaks.sarif
+        category: gitleaks
+
+    - name: Code scanning - semgrep
+      if: always() && steps.list.outputs.semgrep == 'true'
+      continue-on-error: true
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: sarif/semgrep.sarif
+        category: semgrep

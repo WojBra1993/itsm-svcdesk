@@ -1,0 +1,130 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The Lab 5 pipeline (CI-SPEC.md P-01..P-09). Copy it with .github/actions/ into your repository, then replace the one
+# placeholder step of build-test (it fails on purpose) with the build and the tests of your svcdesk (P-02: afterwards
+# the placeholder's marker must not appear anywhere under .github/). Everything else works as shipped.
+#
+#   build-test     your build and your tests                                   gate: yours
+#   deps           Trivy fs, Grype, OSV-Scanner -> trivy/grype/osv-scanner.sarif gate: Trivy, HIGH/CRITICAL vulnerability
+#   secrets        gitleaks dir -> gitleaks.sarif                              gate: any secret
+#   code           Semgrep p/default -> semgrep.sarif                          gate: none
+#   image          docker build, Trivy image gate, Syft SBOM; on main only:    gate: Trivy, HIGH/CRITICAL with a fix
+#                  push ghcr.io/<owner>/<repo>:<sha> and attest it twice (provenance, SBOM)
+#   ignore-policy  .trivyignore and .gitleaksignore expire and say why (P-06)  gate: any violation
+#   capture        the five SARIF files as artifact `sarif`, attested on lab5/canary only; code scanning upload
+#
+# Keep the seven job ids, without a `name:` and without a matrix (the GitHub API reports a job by its name, and the
+# checks look for these ids), and keep each job's `uses: ./.github/actions/...`: what runs inside an action is yours to
+# change, the jobs and the SARIF file names are not (P-01). Scanners run as `docker run` of official images pinned by
+# tag and digest (the inputs of each action); actions from outside this repository are pinned by commit SHA (P-03).
+# There is no concurrency group on purpose: every commit needs its own finished run (P-05 reads the run of M, P-08 the
+# run of C), and a group would cancel runs queued behind another one.
+name: ci
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build and test svcdesk
+        run: |
+          docker compose build svcdesk tests
+          docker compose --profile tests run --rm tests
+
+  deps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Scan dependencies (Trivy fs, Grype, OSV-Scanner; gate on Trivy)
+        uses: ./.github/actions/scan-deps
+
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Scan for secrets (gitleaks; gate on any finding)
+        uses: ./.github/actions/scan-secrets
+
+  code:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Scan the code (Semgrep; report only)
+        uses: ./.github/actions/scan-code
+
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write # push ghcr.io/<owner>/<repo> (main only)
+      id-token: write # sign the two attestations (main only)
+      attestations: write # store them in this repository (main only)
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build, gate, SBOM; on main push and attest
+        uses: ./.github/actions/image
+        with:
+          context: .
+          dockerfile: Dockerfile
+
+  ignore-policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check .trivyignore and .gitleaksignore (P-06)
+        uses: ./.github/actions/ignore-policy
+
+  capture:
+    needs: [deps, secrets, code]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write # attest the SARIF (lab5/canary only)
+      attestations: write # store that attestation in this repository
+      security-events: write # upload the SARIF to code scanning
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Bundle the SARIF as artifact sarif (attested on lab5/canary)
+        uses: ./.github/actions/capture

@@ -1,5 +1,8 @@
 # Tier A on every push: runs the published checker against this repository and publishes report.json.
-# It uses no secrets: the checker image is public and the report contains only this repository's results.
+# It uses no secrets: the checker image is public and the report contains only this repository's results. The
+# checker gets the job's own read-only token as GH_TOKEN for its GitHub API reads (Lab 5: runs, attestations);
+# anonymous calls from the runners' shared addresses are rate-limited. GITHUB_ACTIONS ("true" in every job) tells
+# the checker it runs here: a ci.yml run of the same push still in progress is then `skip`, not `error` (Lab 5).
 # The image is the course tag from itsmlab.yaml (ghcr.io/swasik/itsmlab:2026): runners pull it fresh on every
 # job, so a checker update reaches this workflow without any change here.
 # Tier A runs are advisory and unlimited (they never count as attempts). Grades come from Tier B, which
@@ -16,13 +19,15 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45   # Lab 8: `verify 8` (two Ollamas, two promptfoo runs) takes 20-35 minutes on a runner
     env:
       # "true" only on the main branch of the course template, which holds no service: there the checker must
       # fail every Core spec, and the job is green when it fails exactly that way. Always "false" in your repository.
       TEMPLATE_SKELETON: ${{ github.repository == 'swasik/itsm-2026-template' && github.ref == 'refs/heads/main' }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0   # every branch and tag, full history: Lab 5 reads lab5/canary and its parent on main
 
       - name: Read lab and checker image from itsmlab.yaml
         id: cfg
@@ -40,12 +45,14 @@ jobs:
         env:
           LAB: ${{ steps.cfg.outputs.lab }}
           IMAGE: ${{ steps.cfg.outputs.image }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           rm -f report.json
           rc=0
           docker run --rm \
             -v "$PWD:$PWD" -w "$PWD" \
             -v /var/run/docker.sock:/var/run/docker.sock \
+            -e GH_TOKEN -e GITHUB_ACTIONS \
             "$IMAGE" verify "$LAB" --json report.json || rc=$?
           echo "exit=$rc" >> "$GITHUB_OUTPUT"
           exit "$rc"
@@ -79,8 +86,10 @@ jobs:
                 "|---|---|---|---|",
                 (.specs[] | "| \(.id) `\(.name)` | \(.bundle) | \(.status) | \([.checks[] | select(.status == "fail" or .status == "error") | .id] | join(", ")) |"),
                 "",
-                "Observed resolutions: C1=\(.observations.C1 // "-"), C2=\(.observations.C2 // "-"), C3=\(.observations.C3 // "-")",
-                "",
+                (if .observations.C1 or .observations.C2 or .observations.C3 then
+                   "Observed resolutions: C1=\(.observations.C1 // "-"), C2=\(.observations.C2 // "-"), C3=\(.observations.C3 // "-")",
+                   ""
+                 else empty end),
                 (.advisories[]? | "- \(.id): \(.message)"),
                 "",
                 (if ([.specs[].checks[] | select(.status == "fail" or .status == "error")] | length) > 0 then

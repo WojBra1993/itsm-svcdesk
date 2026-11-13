@@ -1,0 +1,13 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# .trivyignore - vulnerabilities the Trivy gates (deps, image) may ignore. The ignore-policy job enforces CI-SPEC.md
+# P-06 on every line that is neither blank nor a comment:
+#   * the line is exactly `<ID> exp:<YYYY-MM-DD>`, ID a CVE-YYYY-NNNN or a GHSA-xxxx-xxxx-xxxx, nothing after it;
+#   * the date is after today and at most 90 days away (Trivy stops ignoring at 00:00 UTC of that date);
+#   * directly above it, '#' lines of your own giving the reason, at least 20 characters in total (a blank line
+#     between the reason and the entry breaks the link);
+#   * no ID twice. Every ID here also needs a row in TRIAGE.md (Tool trivy, Decision ignore; P-12).
+# Leave the blank line below this header. Example (without the leading "# " on both lines):
+#
+# # pip vendors msgpack 1.1.2 and no pip release ships the fix yet; pip is not called at run time
+# GHSA-6v7p-g79w-8964 exp:2026-12-28
+

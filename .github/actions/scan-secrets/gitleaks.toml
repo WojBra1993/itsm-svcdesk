@@ -1,0 +1,16 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# gitleaks configuration of the secrets job: gitleaks' own default rules, unchanged, plus one path allowlist.
+# The evidence you commit - the SARIF under bakeoff/sarif/ (CI-SPEC.md P-25) and the AI reviewer's transcript
+# bakeoff/transcript.md (P-30) - quotes the canary's secrets (Semgrep copies the matched line into region.snippet),
+# so without this allowlist main's secrets gate would trip on its own evidence. The patterns are as narrow as the
+# evidence: .sarif files directly in bakeoff/sarif/, and bakeoff/transcript.md, nothing else. Passing this file with
+# --config also means a .gitleaks.toml in the repository does not change what the gate sees; ignores go to
+# .gitleaksignore, with a reason (P-06).
+title = "ITSM 2026 Lab 5 - gitleaks defaults plus the bake-off evidence allowlist"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "the bake-off evidence: scanner SARIF (bakeoff/sarif/*.sarif) and the AI transcript"
+paths = ['''^bakeoff/sarif/[^/]+\.sarif$''', '''^bakeoff/transcript\.md$''']

@@ -1,0 +1,14 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# The ignore-policy job (CI-SPEC.md P-06): every entry of .trivyignore is `<ID> exp:<YYYY-MM-DD>`, expires within 90
+# days of today (UTC), has at least 20 characters of reason in '#' lines directly above it and appears once; every
+# entry of .gitleaksignore has such a reason; .trivyignore.yaml does not exist. ignore_policy.py (standard library only,
+# the runner's python3) is the course's check, byte for byte the one the checker uses; its docstring states the rule.
+name: ignore-policy
+description: Fails when .trivyignore or .gitleaksignore breaks the Lab 5 ignore policy (P-06)
+
+runs:
+  using: composite
+  steps:
+    - name: Check .trivyignore and .gitleaksignore at today's date (UTC)
+      shell: bash
+      run: python3 "$GITHUB_ACTION_PATH/ignore_policy.py" --date "$(date -u +%F)" .trivyignore .gitleaksignore

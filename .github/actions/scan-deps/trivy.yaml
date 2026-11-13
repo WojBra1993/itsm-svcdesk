@@ -1,0 +1,5 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# Trivy's configuration for this action: empty on purpose. Every Trivy run of the action passes --config with this
+# file, so a trivy.yaml at the repository root (which Trivy would otherwise load from the working directory, with
+# settings such as scan.skip-dirs) cannot change what the gate sees. Everything Trivy does is on its command line;
+# what it may ignore is .trivyignore, under the ignore policy (CI-SPEC.md P-06).

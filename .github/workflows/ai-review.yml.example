@@ -1,0 +1,133 @@
+# ai-generated: 100% - Claude Code (Opus 5.5) wrote this file from the course's Lab 5 design (CI-SPEC.md is its public part); the lecturer reviews it
+# Stretch 2, the AI detector (CI-SPEC.md P-30): an AI reviewer on your canary set, in a workflow that only you start,
+# and it runs ON THE CANARY COMMIT C, so its attestation names C as the source.
+#
+# ORDER MATTERS: rename this file to .github/workflows/ai-review.yml and commit it to main - together with
+# ai-review/PROMPT.md and tools/ai-to-sarif.py - BEFORE `itsmlab canary 5` creates branch lab5/canary. The canary
+# commit C is main plus your set, so C then carries the workflow, the prompt and the converter; a workflow added to
+# main later is not on the canary branch and cannot run there (the canary may not change anything else, P-07).
+#
+# To run it: add the repository secret CLAUDE_CODE_OAUTH_TOKEN (`claude setup-token` on your machine; Claude Pro or
+# Max), then start the workflow from branch lab5/canary - Actions, ai-review, Run workflow, "Use workflow from:
+# lab5/canary" - or `gh workflow run ai-review.yml --ref lab5/canary`. It checks out C, runs
+# anthropics/claude-code-action pinned by SHA in automation mode (the `prompt` input) with read-only tools and a JSON
+# schema for the answer, writes ai-findings.json and bakeoff/transcript.md (the model's final answer), converts to
+# ai-reviewer.sarif, attests it, and uploads artifact `ai-sarif` with the three files. On main, commit
+# ai-reviewer.sarif to bakeoff/sarif/ and the transcript to bakeoff/transcript.md before your SARIF receipt (P-25,
+# P-30). Both are evidence: the pipeline's scanners skip exactly those paths, since they quote the canary's secrets.
+#
+# Why it looks like this (Lecture 5, untrusted input): `workflow_dispatch` only, so it never runs on a pull request or
+# on anybody else's input, and your subscription is spent only when you press the button; no pull_request_target and
+# no allowed_non_write_users; top-level `permissions: contents: read`, and only this job adds id-token and attestations
+# for the attestation; the action gets the job's own read-only token (github_token), so it needs no Claude GitHub App
+# (without it the action would exchange the job's OIDC token for one); Claude may read and search files, nothing else.
+#
+# The local route needs no workflow (its SARIF is unattested, which P-26 accepts for ai-reviewer). From your
+# repository, with M the canary's parent and C the canary commit:
+#   git diff <M>..<C> -- lab5-canary | claude -p "$(cat ai-review/PROMPT.md)" --output-format json > ai-raw.json
+#   jq -r .result ai-raw.json > bakeoff/transcript.md
+#   python3 tools/ai-to-sarif.py bakeoff/transcript.md --route local -o bakeoff/sarif/ai-reviewer.sarif
+# Any other assistant works the same way - Gemini CLI, or a local model through Ollama: give it PROMPT.md and the diff,
+# save its answer as bakeoff/transcript.md, convert it with ai-to-sarif.py (it accepts the answer inside a ```json
+# fence too; `python3 tools/ai-to-sarif.py --help` shows the shape).
+name: ai-review
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write # sign the attestation of ai-reviewer.sarif
+      attestations: write # store it in this repository
+    steps:
+      - name: Refuse to run anywhere but the canary
+        if: github.ref != 'refs/heads/lab5/canary'
+        run: |
+          echo "::error title=Run it from lab5/canary::start this workflow with 'Use workflow from: lab5/canary' (gh workflow run ai-review.yml --ref lab5/canary): it reviews your canary commit C"
+          exit 1
+
+      - name: Check out the canary commit C
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read the prompt
+        id: prompt
+        run: |
+          for f in ai-review/PROMPT.md tools/ai-to-sarif.py lab5-canary; do
+            if [ ! -e "$f" ]; then
+              echo "::error title=$f missing on lab5/canary::commit the workflow, ai-review/PROMPT.md and tools/ai-to-sarif.py to main before itsmlab canary 5"
+              exit 1
+            fi
+          done
+          delimiter="PROMPT_$(openssl rand -hex 16)"
+          {
+            echo "text<<$delimiter"
+            cat ai-review/PROMPT.md
+            echo
+            echo "$delimiter"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Review lab5-canary/ with Claude Code
+        id: review
+        uses: anthropics/claude-code-action@8ce9314fa9a404564fa7e954cd84f25bcba2b829 # v1.0.236
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          prompt: ${{ steps.prompt.outputs.text }}
+          claude_args: |
+            --allowedTools Read,Glob,Grep
+            --disallowedTools Bash,Edit,Write,NotebookEdit,WebFetch,WebSearch
+            --max-turns 40
+            --json-schema '{"type":"object","required":["findings"],"properties":{"model":{"type":"string"},"findings":{"type":"array","items":{"type":"object","required":["file","start_line","end_line","class","rule","message"],"properties":{"file":{"type":"string"},"start_line":{"type":"integer","minimum":1},"end_line":{"type":"integer","minimum":1},"class":{"type":"string","enum":["secret","injection","deserialization","weak-crypto","insecure-transport","path-traversal","ssrf","vulnerable-dependency","misconfiguration","access-control"]},"cwe":{"type":"string"},"rule":{"type":"string"},"message":{"type":"string"}}}}}}'
+
+      - name: Write ai-findings.json and bakeoff/transcript.md
+        env:
+          FINDINGS: ${{ steps.review.outputs.structured_output }}
+          EXECUTION_FILE: ${{ steps.review.outputs.execution_file }}
+        run: |
+          # The model id is the one Claude Code reports at start (execution file), not what the model says it is.
+          model="$(jq -r '[.[] | select(.type == "system" and .subtype == "init") | .model][0] // "unknown"' "$EXECUTION_FILE")"
+          printf '%s' "$FINDINGS" | jq --arg model "$model" '{model: $model, findings: .findings}' > ai-findings.json
+          mkdir -p bakeoff
+          {
+            echo "# AI review of lab5-canary/ at $GITHUB_SHA"
+            echo
+            echo "Model: $model. Route: action, anthropics/claude-code-action v1.0.236, run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+            echo
+            echo "## The model's final answer"
+            echo
+            jq -r '[.[] | select(.type == "result")][-1].result // "(none)"' "$EXECUTION_FILE"
+            echo
+            echo "## The structured answer (ai-findings.json)"
+            echo
+            echo '```json'
+            cat ai-findings.json
+            echo '```'
+          } > bakeoff/transcript.md
+          echo "$(jq '.findings | length' ai-findings.json) findings by $model"
+
+      - name: Convert to SARIF (driver ai-reviewer)
+        run: python3 tools/ai-to-sarif.py ai-findings.json --route action -o ai-reviewer.sarif
+
+      - name: Attest ai-reviewer.sarif (source commit C)
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+        with:
+          subject-path: ${{ github.workspace }}/ai-reviewer.sarif
+
+      - name: Upload ai-reviewer.sarif, ai-findings.json, bakeoff/transcript.md (artifact ai-sarif)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ai-sarif
+          path: |
+            ai-reviewer.sarif
+            ai-findings.json
+            bakeoff/transcript.md
+          if-no-files-found: error
