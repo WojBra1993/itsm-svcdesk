@@ -1,0 +1,24 @@
+# ai-generated: 100% - Codex wrote two review rules for exception handling in svcdesk.
+rules:
+  - id: svcdesk-bare-except
+    languages: [python]
+    severity: WARNING
+    message: A bare except also catches cancellation and process-control exceptions; restrict the caught types.
+    pattern: |
+      try:
+          ...
+      except:
+          ...
+  - id: svcdesk-broad-async-except
+    languages: [python]
+    severity: WARNING
+    message: Review this broad async exception handler; distinguish expected service errors from programming defects.
+    patterns:
+      - pattern: |
+          try:
+              ...
+          except Exception:
+              ...
+      - pattern-inside: |
+          async def $HANDLER(...):
+              ...
