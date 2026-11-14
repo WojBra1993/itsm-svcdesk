@@ -1,0 +1,67 @@
+{
+  "set": "lab5-canary",
+  "defects": [
+    {
+      "id": "A08",
+      "file": "lab5-canary/app/reset_tokens.py",
+      "class": "weak-crypto",
+      "cwe": "CWE-338",
+      "start_line": 10,
+      "end_line": 10
+    },
+    {
+      "id": "A12",
+      "file": "lab5-canary/app/ticket_access.py",
+      "class": "access-control",
+      "cwe": "CWE-639",
+      "start_line": 12,
+      "end_line": 17
+    },
+    {
+      "id": "A14",
+      "file": "lab5-canary/app/ticket_search.py",
+      "class": "injection",
+      "cwe": "CWE-89",
+      "start_line": 8,
+      "end_line": 10
+    },
+    {
+      "id": "C02",
+      "file": "lab5-canary/config/cmdb_token.py",
+      "class": "secret",
+      "cwe": "CWE-798",
+      "start_line": 3,
+      "end_line": 3
+    },
+    {
+      "id": "C04",
+      "file": "lab5-canary/config/jwt_secret.py",
+      "class": "secret",
+      "cwe": "CWE-321",
+      "start_line": 2,
+      "end_line": 2
+    },
+    {
+      "id": "C05",
+      "file": "lab5-canary/config/mailer.py",
+      "class": "secret",
+      "cwe": "CWE-798",
+      "start_line": 4,
+      "end_line": 4
+    },
+    {
+      "id": "D01",
+      "file": "lab5-canary/requirements.txt",
+      "class": "vulnerable-dependency",
+      "cwe": "CWE-1395",
+      "package": "cryptography"
+    },
+    {
+      "id": "D06",
+      "file": "lab5-canary/requirements.txt",
+      "class": "vulnerable-dependency",
+      "cwe": "CWE-1395",
+      "package": "requests"
+    }
+  ]
+}
