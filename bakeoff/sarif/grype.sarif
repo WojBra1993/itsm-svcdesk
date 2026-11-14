@@ -1,0 +1,1215 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "grype",
+          "version": "0.119.0",
+          "informationUri": "https://github.com/anchore/grype",
+          "rules": [
+            {
+              "id": "GHSA-x4qr-2fvf-3mr5-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-x4qr-2fvf-3mr5 high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-x4qr-2fvf-3mr5",
+              "help": {
+                "text": "Vulnerability GHSA-x4qr-2fvf-3mr5\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 39.0.1\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-x4qr-2fvf-3mr5](https://github.com/advisories/GHSA-x4qr-2fvf-3mr5)",
+                "markdown": "**Vulnerability GHSA-x4qr-2fvf-3mr5**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 39.0.1  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-x4qr-2fvf-3mr5](https://github.com/advisories/GHSA-x4qr-2fvf-3mr5)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "7.4"
+              }
+            },
+            {
+              "id": "CVE-2020-36242-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2020-36242 critical vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "In the cryptography package before 3.3.2 for Python, certain sequences of update calls to symmetrically encrypt multi-GB values could result in an integer overflow and buffer overflow, as demonstrated by the Fernet class."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2020-36242",
+              "help": {
+                "text": "Vulnerability CVE-2020-36242\nSeverity: critical\nPackage: cryptography\nVersion: 3.2\nFix Version: 3.3.2\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2020-36242](https://nvd.nist.gov/vuln/detail/CVE-2020-36242)",
+                "markdown": "**Vulnerability CVE-2020-36242**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| critical  | cryptography  | 3.2  | 3.3.2  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2020-36242](https://nvd.nist.gov/vuln/detail/CVE-2020-36242)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "9.1"
+              }
+            },
+            {
+              "id": "GHSA-rhm9-p9w5-fwm7-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-rhm9-p9w5-fwm7 high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "PyCA Cryptography symmetrically encrypting large values can lead to integer overflow"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-rhm9-p9w5-fwm7",
+              "help": {
+                "text": "Vulnerability GHSA-rhm9-p9w5-fwm7\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 3.3.2\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-rhm9-p9w5-fwm7](https://github.com/advisories/GHSA-rhm9-p9w5-fwm7)",
+                "markdown": "**Vulnerability GHSA-rhm9-p9w5-fwm7**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 3.3.2  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-rhm9-p9w5-fwm7](https://github.com/advisories/GHSA-rhm9-p9w5-fwm7)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "9.1"
+              }
+            },
+            {
+              "id": "GHSA-x84v-xcm2-53pg-requests",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-x84v-xcm2-53pg high vulnerability for requests package"
+              },
+              "fullDescription": {
+                "text": "Insufficiently Protected Credentials in Requests"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-x84v-xcm2-53pg",
+              "help": {
+                "text": "Vulnerability GHSA-x84v-xcm2-53pg\nSeverity: high\nPackage: requests\nVersion: 2.19.1\nFix Version: 2.20.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-x84v-xcm2-53pg](https://github.com/advisories/GHSA-x84v-xcm2-53pg)",
+                "markdown": "**Vulnerability GHSA-x84v-xcm2-53pg**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | requests  | 2.19.1  | 2.20.0  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-x84v-xcm2-53pg](https://github.com/advisories/GHSA-x84v-xcm2-53pg)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/requests@2.19.1"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "GHSA-9v9h-cgj8-h64p-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-9v9h-cgj8-h64p medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Null pointer dereference in PKCS12 parsing"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-9v9h-cgj8-h64p",
+              "help": {
+                "text": "Vulnerability GHSA-9v9h-cgj8-h64p\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 42.0.2\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-9v9h-cgj8-h64p](https://github.com/advisories/GHSA-9v9h-cgj8-h64p)",
+                "markdown": "**Vulnerability GHSA-9v9h-cgj8-h64p**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 42.0.2  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-9v9h-cgj8-h64p](https://github.com/advisories/GHSA-9v9h-cgj8-h64p)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "GHSA-j8r2-6x86-q33q-requests",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-j8r2-6x86-q33q medium vulnerability for requests package"
+              },
+              "fullDescription": {
+                "text": "Unintended leak of Proxy-Authorization header in requests"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-j8r2-6x86-q33q",
+              "help": {
+                "text": "Vulnerability GHSA-j8r2-6x86-q33q\nSeverity: medium\nPackage: requests\nVersion: 2.19.1\nFix Version: 2.31.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-j8r2-6x86-q33q](https://github.com/advisories/GHSA-j8r2-6x86-q33q)",
+                "markdown": "**Vulnerability GHSA-j8r2-6x86-q33q**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | requests  | 2.19.1  | 2.31.0  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-j8r2-6x86-q33q](https://github.com/advisories/GHSA-j8r2-6x86-q33q)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/requests@2.19.1"
+                ],
+                "security-severity": "6.1"
+              }
+            },
+            {
+              "id": "CVE-2020-25659-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2020-25659 medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "python-cryptography 3.2 is vulnerable to Bleichenbacher timing attacks in the RSA decryption API, via timed processing of valid PKCS#1 v1.5 ciphertext."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2020-25659",
+              "help": {
+                "text": "Vulnerability CVE-2020-25659\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: \nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2020-25659](https://nvd.nist.gov/vuln/detail/CVE-2020-25659)",
+                "markdown": "**Vulnerability CVE-2020-25659**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  |   | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2020-25659](https://nvd.nist.gov/vuln/detail/CVE-2020-25659)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "5.9"
+              }
+            },
+            {
+              "id": "GHSA-3ww4-gg4f-jr7f-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-3ww4-gg4f-jr7f high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Python Cryptography package vulnerable to Bleichenbacher timing oracle attack"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-3ww4-gg4f-jr7f",
+              "help": {
+                "text": "Vulnerability GHSA-3ww4-gg4f-jr7f\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 42.0.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-3ww4-gg4f-jr7f](https://github.com/advisories/GHSA-3ww4-gg4f-jr7f)",
+                "markdown": "**Vulnerability GHSA-3ww4-gg4f-jr7f**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 42.0.0  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-3ww4-gg4f-jr7f](https://github.com/advisories/GHSA-3ww4-gg4f-jr7f)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "8.7"
+              }
+            },
+            {
+              "id": "CVE-2023-50782-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-50782 high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "A flaw was found in the python-cryptography package. This issue may allow a remote attacker to decrypt captured messages in TLS servers that use RSA key exchanges, which may lead to exposure of confidential or sensitive data."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2023-50782",
+              "help": {
+                "text": "Vulnerability CVE-2023-50782\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 42.0.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2023-50782](https://nvd.nist.gov/vuln/detail/CVE-2023-50782)",
+                "markdown": "**Vulnerability CVE-2023-50782**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 42.0.0  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2023-50782](https://nvd.nist.gov/vuln/detail/CVE-2023-50782)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "GHSA-w7pp-m8wf-vj6r-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-w7pp-m8wf-vj6r medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Cipher.update_into can corrupt memory if passed an immutable python object as the outbuf"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-w7pp-m8wf-vj6r",
+              "help": {
+                "text": "Vulnerability GHSA-w7pp-m8wf-vj6r\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 39.0.1\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-w7pp-m8wf-vj6r](https://github.com/advisories/GHSA-w7pp-m8wf-vj6r)",
+                "markdown": "**Vulnerability GHSA-w7pp-m8wf-vj6r**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 39.0.1  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-w7pp-m8wf-vj6r](https://github.com/advisories/GHSA-w7pp-m8wf-vj6r)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "6.9"
+              }
+            },
+            {
+              "id": "CVE-2023-49083-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-49083 high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Calling `load_pem_pkcs7_certificates` or `load_der_pkcs7_certificates` could lead to a NULL-pointer dereference and segfault. Exploitation of this vulnerability poses a serious risk of Denial of Service (DoS) for any application attempting to deserialize a PKCS7 blob/certificate. The consequences extend to potential disruptions in system availability and stability. This vulnerability has been patched in version 41.0.6."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2023-49083",
+              "help": {
+                "text": "Vulnerability CVE-2023-49083\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 41.0.6\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2023-49083](https://nvd.nist.gov/vuln/detail/CVE-2023-49083)",
+                "markdown": "**Vulnerability CVE-2023-49083**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 41.0.6  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2023-49083](https://nvd.nist.gov/vuln/detail/CVE-2023-49083)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "CVE-2023-23931-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2023-23931 medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. In affected versions `Cipher.update_into` would accept Python objects which implement the buffer protocol, but provide only immutable buffers. This would allow immutable objects (such as `bytes`) to be mutated, thus violating fundamental rules of Python and resulting in corrupted output. This now correctly raises an exception. This issue has been present since `update_into` was originally introduced in cryptography 1.8."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2023-23931",
+              "help": {
+                "text": "Vulnerability CVE-2023-23931\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 39.0.1\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2023-23931](https://nvd.nist.gov/vuln/detail/CVE-2023-23931)",
+                "markdown": "**Vulnerability CVE-2023-23931**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 39.0.1  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2023-23931](https://nvd.nist.gov/vuln/detail/CVE-2023-23931)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "6.5"
+              }
+            },
+            {
+              "id": "GHSA-jfhm-5ghh-2f97-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-jfhm-5ghh-2f97 medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography vulnerable to NULL-dereference when loading PKCS7 certificates"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-jfhm-5ghh-2f97",
+              "help": {
+                "text": "Vulnerability GHSA-jfhm-5ghh-2f97\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 41.0.6\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-jfhm-5ghh-2f97](https://github.com/advisories/GHSA-jfhm-5ghh-2f97)",
+                "markdown": "**Vulnerability GHSA-jfhm-5ghh-2f97**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 41.0.6  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-jfhm-5ghh-2f97](https://github.com/advisories/GHSA-jfhm-5ghh-2f97)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "5.9"
+              }
+            },
+            {
+              "id": "GHSA-9hjg-9r4m-mvj7-requests",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-9hjg-9r4m-mvj7 medium vulnerability for requests package"
+              },
+              "fullDescription": {
+                "text": "Requests vulnerable to .netrc credentials leak via malicious URLs"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-9hjg-9r4m-mvj7",
+              "help": {
+                "text": "Vulnerability GHSA-9hjg-9r4m-mvj7\nSeverity: medium\nPackage: requests\nVersion: 2.19.1\nFix Version: 2.32.4\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-9hjg-9r4m-mvj7](https://github.com/advisories/GHSA-9hjg-9r4m-mvj7)",
+                "markdown": "**Vulnerability GHSA-9hjg-9r4m-mvj7**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | requests  | 2.19.1  | 2.32.4  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-9hjg-9r4m-mvj7](https://github.com/advisories/GHSA-9hjg-9r4m-mvj7)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/requests@2.19.1"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "GHSA-r6ph-v2qm-q3c2-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-r6ph-v2qm-q3c2 high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography Vulnerable to a Subgroup Attack Due to Missing Subgroup Validation for SECT Curves"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-r6ph-v2qm-q3c2",
+              "help": {
+                "text": "Vulnerability GHSA-r6ph-v2qm-q3c2\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 46.0.5\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-r6ph-v2qm-q3c2](https://github.com/advisories/GHSA-r6ph-v2qm-q3c2)",
+                "markdown": "**Vulnerability GHSA-r6ph-v2qm-q3c2**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 46.0.5  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-r6ph-v2qm-q3c2](https://github.com/advisories/GHSA-r6ph-v2qm-q3c2)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "8.2"
+              }
+            },
+            {
+              "id": "CVE-2026-26007-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2026-26007 medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to 46.0.5, the public_key_from_numbers (or EllipticCurvePublicNumbers.public_key()), EllipticCurvePublicNumbers.public_key(), load_der_public_key() and load_pem_public_key() functions do not verify that the point belongs to the expected prime-order subgroup of the curve. This missing validation allows an attacker to provide a public key point P from a small-order subgroup. This can lead to security issues in various situations, such as the most commonly used signature verification (ECDSA) and shared key negotiation (ECDH). When the victim computes the shared secret as S = [victim_private_key]P via ECDH, this leaks information about victim_private_key mod (small_subgroup_order). For curves with cofactor \u003e 1, this reveals the least significant bits of the private key. When these weak public keys are used in ECDSA , it's easy to forge signatures on the small subgroup. Only SECT curves are impacted by this. This vulnerability is fixed in 46.0.5."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2026-26007",
+              "help": {
+                "text": "Vulnerability CVE-2026-26007\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 46.0.5\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2026-26007](https://nvd.nist.gov/vuln/detail/CVE-2026-26007)",
+                "markdown": "**Vulnerability CVE-2026-26007**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 46.0.5  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2026-26007](https://nvd.nist.gov/vuln/detail/CVE-2026-26007)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "8.2"
+              }
+            },
+            {
+              "id": "GHSA-9wx4-h78v-vm56-requests",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-9wx4-h78v-vm56 medium vulnerability for requests package"
+              },
+              "fullDescription": {
+                "text": "Requests `Session` object does not verify requests after making first request with verify=False"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-9wx4-h78v-vm56",
+              "help": {
+                "text": "Vulnerability GHSA-9wx4-h78v-vm56\nSeverity: medium\nPackage: requests\nVersion: 2.19.1\nFix Version: 2.32.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-9wx4-h78v-vm56](https://github.com/advisories/GHSA-9wx4-h78v-vm56)",
+                "markdown": "**Vulnerability GHSA-9wx4-h78v-vm56**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | requests  | 2.19.1  | 2.32.0  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-9wx4-h78v-vm56](https://github.com/advisories/GHSA-9wx4-h78v-vm56)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/requests@2.19.1"
+                ],
+                "security-severity": "5.6"
+              }
+            },
+            {
+              "id": "CVE-2026-69248-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2026-69248 medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. In versions 45.0.0 through 48.0.0, if an intermediate constrained CA permits the DNS name foo.example.com, and the leaf certificate has a wildcard in its DNS SAN of *.example.com, python-cryptography's verifier accepts which allows escaping outside of the permitted names. The core issue is in DNSConstraint::matches, where a wildcard pattern was treated as matching a more-specific permitted constraint even though *.example.com can expand to sibling names such as bar.example.com outside foo.example.com. This allows acceptance of an invalid certificate chain. This issue is fixed in 49.0.0."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2026-69248",
+              "help": {
+                "text": "Vulnerability CVE-2026-69248\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 49.0.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2026-69248](https://nvd.nist.gov/vuln/detail/CVE-2026-69248)",
+                "markdown": "**Vulnerability CVE-2026-69248**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 49.0.0  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2026-69248](https://nvd.nist.gov/vuln/detail/CVE-2026-69248)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "6.9"
+              }
+            },
+            {
+              "id": "CVE-2026-34073-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "CVE-2026-34073 medium vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to version 46.0.6, DNS name constraints were only validated against SANs within child certificates, and not the \"peer name\" presented during each validation. Consequently, cryptography would allow a peer named bar.example.com to validate against a wildcard leaf certificate for *.example.com, even if the leaf's parent certificate (or upwards) contained an excluded subtree constraint for bar.example.com. This issue has been patched in version 46.0.6."
+              },
+              "helpUri": "https://nvd.nist.gov/vuln/detail/CVE-2026-34073",
+              "help": {
+                "text": "Vulnerability CVE-2026-34073\nSeverity: medium\nPackage: cryptography\nVersion: 3.2\nFix Version: 46.0.6\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: nvd:language:python\nLink: [CVE-2026-34073](https://nvd.nist.gov/vuln/detail/CVE-2026-34073)",
+                "markdown": "**Vulnerability CVE-2026-34073**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | cryptography  | 3.2  | 46.0.6  | python  | /lab5-canary/requirements.txt  | nvd:language:python  | [CVE-2026-34073](https://nvd.nist.gov/vuln/detail/CVE-2026-34073)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "GHSA-gc5v-m9x4-r6x2-requests",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-gc5v-m9x4-r6x2 medium vulnerability for requests package"
+              },
+              "fullDescription": {
+                "text": "Requests has Insecure Temp File Reuse in its extract_zipped_paths() utility function"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-gc5v-m9x4-r6x2",
+              "help": {
+                "text": "Vulnerability GHSA-gc5v-m9x4-r6x2\nSeverity: medium\nPackage: requests\nVersion: 2.19.1\nFix Version: 2.33.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-gc5v-m9x4-r6x2](https://github.com/advisories/GHSA-gc5v-m9x4-r6x2)",
+                "markdown": "**Vulnerability GHSA-gc5v-m9x4-r6x2**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | requests  | 2.19.1  | 2.33.0  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-gc5v-m9x4-r6x2](https://github.com/advisories/GHSA-gc5v-m9x4-r6x2)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/requests@2.19.1"
+                ],
+                "security-severity": "4.4"
+              }
+            },
+            {
+              "id": "GHSA-6w46-j5rx-g56g-pytest",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-6w46-j5rx-g56g medium vulnerability for pytest package"
+              },
+              "fullDescription": {
+                "text": "pytest has vulnerable tmpdir handling"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-6w46-j5rx-g56g",
+              "help": {
+                "text": "Vulnerability GHSA-6w46-j5rx-g56g\nSeverity: medium\nPackage: pytest\nVersion: 8.3.5\nFix Version: 9.0.3\nType: python\nLocation: /requirements-tests.txt\nData Namespace: github:language:python\nLink: [GHSA-6w46-j5rx-g56g](https://github.com/advisories/GHSA-6w46-j5rx-g56g)",
+                "markdown": "**Vulnerability GHSA-6w46-j5rx-g56g**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| medium  | pytest  | 8.3.5  | 9.0.3  | python  | /requirements-tests.txt  | github:language:python  | [GHSA-6w46-j5rx-g56g](https://github.com/advisories/GHSA-6w46-j5rx-g56g)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/pytest@8.3.5"
+                ],
+                "security-severity": "6.8"
+              }
+            },
+            {
+              "id": "GHSA-m959-cc7f-wv43-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-m959-cc7f-wv43 low vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "cryptography has incomplete DNS name constraint enforcement on peer names"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-m959-cc7f-wv43",
+              "help": {
+                "text": "Vulnerability GHSA-m959-cc7f-wv43\nSeverity: low\nPackage: cryptography\nVersion: 3.2\nFix Version: 46.0.6\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-m959-cc7f-wv43](https://github.com/advisories/GHSA-m959-cc7f-wv43)",
+                "markdown": "**Vulnerability GHSA-m959-cc7f-wv43**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | cryptography  | 3.2  | 46.0.6  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-m959-cc7f-wv43](https://github.com/advisories/GHSA-m959-cc7f-wv43)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "5.3"
+              }
+            },
+            {
+              "id": "GHSA-537c-gmf6-5ccf-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-537c-gmf6-5ccf high vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-537c-gmf6-5ccf",
+              "help": {
+                "text": "Vulnerability GHSA-537c-gmf6-5ccf\nSeverity: high\nPackage: cryptography\nVersion: 3.2\nFix Version: 48.0.1\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-537c-gmf6-5ccf](https://github.com/advisories/GHSA-537c-gmf6-5ccf)",
+                "markdown": "**Vulnerability GHSA-537c-gmf6-5ccf**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| high  | cryptography  | 3.2  | 48.0.1  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-537c-gmf6-5ccf](https://github.com/advisories/GHSA-537c-gmf6-5ccf)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "7.5"
+              }
+            },
+            {
+              "id": "GHSA-5cpq-8wj7-hf2v-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-5cpq-8wj7-hf2v low vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-5cpq-8wj7-hf2v",
+              "help": {
+                "text": "Vulnerability GHSA-5cpq-8wj7-hf2v\nSeverity: low\nPackage: cryptography\nVersion: 3.2\nFix Version: 41.0.0\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-5cpq-8wj7-hf2v](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v)",
+                "markdown": "**Vulnerability GHSA-5cpq-8wj7-hf2v**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | cryptography  | 3.2  | 41.0.0  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-5cpq-8wj7-hf2v](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "1.0"
+              }
+            },
+            {
+              "id": "GHSA-jm77-qphf-c4w8-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-jm77-qphf-c4w8 low vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "pyca/cryptography's wheels include vulnerable OpenSSL"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-jm77-qphf-c4w8",
+              "help": {
+                "text": "Vulnerability GHSA-jm77-qphf-c4w8\nSeverity: low\nPackage: cryptography\nVersion: 3.2\nFix Version: 41.0.3\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-jm77-qphf-c4w8](https://github.com/advisories/GHSA-jm77-qphf-c4w8)",
+                "markdown": "**Vulnerability GHSA-jm77-qphf-c4w8**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | cryptography  | 3.2  | 41.0.3  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-jm77-qphf-c4w8](https://github.com/advisories/GHSA-jm77-qphf-c4w8)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "1.0"
+              }
+            },
+            {
+              "id": "GHSA-v8gr-m533-ghj9-cryptography",
+              "name": "PythonMatcherExactDirectMatch",
+              "shortDescription": {
+                "text": "GHSA-v8gr-m533-ghj9 low vulnerability for cryptography package"
+              },
+              "fullDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-v8gr-m533-ghj9",
+              "help": {
+                "text": "Vulnerability GHSA-v8gr-m533-ghj9\nSeverity: low\nPackage: cryptography\nVersion: 3.2\nFix Version: 41.0.4\nType: python\nLocation: /lab5-canary/requirements.txt\nData Namespace: github:language:python\nLink: [GHSA-v8gr-m533-ghj9](https://github.com/advisories/GHSA-v8gr-m533-ghj9)",
+                "markdown": "**Vulnerability GHSA-v8gr-m533-ghj9**\n| Severity | Package | Version | Fix Version | Type | Location | Data Namespace | Link |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| low  | cryptography  | 3.2  | 41.0.4  | python  | /lab5-canary/requirements.txt  | github:language:python  | [GHSA-v8gr-m533-ghj9](https://github.com/advisories/GHSA-v8gr-m533-ghj9)  |\n"
+              },
+              "properties": {
+                "purls": [
+                  "pkg:pypi/cryptography@3.2"
+                ],
+                "security-severity": "1.0"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "GHSA-x4qr-2fvf-3mr5-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2020-36242-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A critical vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-rhm9-p9w5-fwm7-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-x84v-xcm2-53pg-requests",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: requests, version 2.19.1 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f66df32c590351ede17c9861dbabe104d9888bad6b415c6f0a7befa098e92fdf:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-9v9h-cgj8-h64p-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-j8r2-6x86-q33q-requests",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: requests, version 2.19.1 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f66df32c590351ede17c9861dbabe104d9888bad6b415c6f0a7befa098e92fdf:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2020-25659-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-3ww4-gg4f-jr7f-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-50782-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-w7pp-m8wf-vj6r-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-49083-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2023-23931-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-jfhm-5ghh-2f97-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-9hjg-9r4m-mvj7-requests",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: requests, version 2.19.1 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f66df32c590351ede17c9861dbabe104d9888bad6b415c6f0a7befa098e92fdf:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-r6ph-v2qm-q3c2-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2026-26007-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-9wx4-h78v-vm56-requests",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: requests, version 2.19.1 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f66df32c590351ede17c9861dbabe104d9888bad6b415c6f0a7befa098e92fdf:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2026-69248-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "CVE-2026-34073-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-gc5v-m9x4-r6x2-requests",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: requests, version 2.19.1 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "f66df32c590351ede17c9861dbabe104d9888bad6b415c6f0a7befa098e92fdf:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-6w46-j5rx-g56g-pytest",
+          "level": "warning",
+          "message": {
+            "text": "A medium vulnerability in python package: pytest, version 8.3.5 was found at: /requirements-tests.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/requirements-tests.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "7be66dac31f124bee6d8996e3c980472696949af3c455126b3f63f3532c994ba:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-m959-cc7f-wv43-cryptography",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-537c-gmf6-5ccf-cryptography",
+          "level": "error",
+          "message": {
+            "text": "A high vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-5cpq-8wj7-hf2v-cryptography",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-jm77-qphf-c4w8-cryptography",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        },
+        {
+          "ruleId": "GHSA-v8gr-m533-ghj9-cryptography",
+          "level": "note",
+          "message": {
+            "text": "A low vulnerability in python package: cryptography, version 3.2 was found at: /lab5-canary/requirements.txt"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lab5-canary/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash": "b22439d4c4c3a0cb3075eb9309f6492010d16cc2d7aaf24740e86abc6ccba5ed:1"
+          }
+        }
+      ]
+    }
+  ]
+}

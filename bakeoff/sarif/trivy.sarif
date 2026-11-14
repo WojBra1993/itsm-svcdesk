@@ -1,0 +1,1061 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Trivy Vulnerability Scanner",
+          "informationUri": "https://github.com/aquasecurity/trivy",
+          "name": "Trivy",
+          "rules": [
+            {
+              "id": "CVE-2020-36242",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-cryptography: Large inputs for symmetric encryption can trigger integer overflow leading to buffer overflow"
+              },
+              "fullDescription": {
+                "text": "In the cryptography package before 3.3.2 for Python, certain sequences of update calls to symmetrically encrypt multi-GB values could result in an integer overflow and buffer overflow, as demonstrated by the Fernet class."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2020-36242",
+              "help": {
+                "text": "Vulnerability CVE-2020-36242\nSeverity: HIGH\nPackage: cryptography\nFixed Version: 3.3.2\nLink: [CVE-2020-36242](https://avd.aquasec.com/nvd/cve-2020-36242)\nIn the cryptography package before 3.3.2 for Python, certain sequences of update calls to symmetrically encrypt multi-GB values could result in an integer overflow and buffer overflow, as demonstrated by the Fernet class.",
+                "markdown": "**Vulnerability CVE-2020-36242**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|cryptography|3.3.2|[CVE-2020-36242](https://avd.aquasec.com/nvd/cve-2020-36242)|\n\nIn the cryptography package before 3.3.2 for Python, certain sequences of update calls to symmetrically encrypt multi-GB values could result in an integer overflow and buffer overflow, as demonstrated by the Fernet class."
+              },
+              "properties": {
+                "cvssv3_baseScore": 9.1,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:H",
+                "cvssv40_baseScore": 8.8,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:H/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "9.1",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2023-0286",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "openssl: X.400 address type confusion in X.509 GeneralName"
+              },
+              "fullDescription": {
+                "text": "There is a type confusion vulnerability relating to X.400 address processing\ninside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but\nthe public structure definition for GENERAL_NAME incorrectly specified the type\nof the x400Address field as ASN1_TYPE. This field is subsequently interpreted by\nthe OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an\nASN1_STRING.\n\nWhen CRL checking is enabled (i.e. the application sets the\nX509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass\narbitrary pointers to a memcmp call, enabling them to read memory contents or\nenact a denial of service. In most cases, the attack requires the attacker to\nprovide both the certificate chain and CRL, neither of which need to have a\nvalid signature. If the attacker only controls one of these inputs, the other\ninput must already contain an X.400 address as a CRL distribution point, which\nis uncommon. As such, this vulnerability is most likely to only affect\napplications which have implemented their own functionality for retrieving CRLs\nover a network."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2023-0286",
+              "help": {
+                "text": "Vulnerability CVE-2023-0286\nSeverity: HIGH\nPackage: cryptography\nFixed Version: 39.0.1\nLink: [CVE-2023-0286](https://avd.aquasec.com/nvd/cve-2023-0286)\nThere is a type confusion vulnerability relating to X.400 address processing\ninside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but\nthe public structure definition for GENERAL_NAME incorrectly specified the type\nof the x400Address field as ASN1_TYPE. This field is subsequently interpreted by\nthe OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an\nASN1_STRING.\n\nWhen CRL checking is enabled (i.e. the application sets the\nX509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass\narbitrary pointers to a memcmp call, enabling them to read memory contents or\nenact a denial of service. In most cases, the attack requires the attacker to\nprovide both the certificate chain and CRL, neither of which need to have a\nvalid signature. If the attacker only controls one of these inputs, the other\ninput must already contain an X.400 address as a CRL distribution point, which\nis uncommon. As such, this vulnerability is most likely to only affect\napplications which have implemented their own functionality for retrieving CRLs\nover a network.",
+                "markdown": "**Vulnerability CVE-2023-0286**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|cryptography|39.0.1|[CVE-2023-0286](https://avd.aquasec.com/nvd/cve-2023-0286)|\n\nThere is a type confusion vulnerability relating to X.400 address processing\ninside an X.509 GeneralName. X.400 addresses were parsed as an ASN1_STRING but\nthe public structure definition for GENERAL_NAME incorrectly specified the type\nof the x400Address field as ASN1_TYPE. This field is subsequently interpreted by\nthe OpenSSL function GENERAL_NAME_cmp as an ASN1_TYPE rather than an\nASN1_STRING.\n\nWhen CRL checking is enabled (i.e. the application sets the\nX509_V_FLAG_CRL_CHECK flag), this vulnerability may allow an attacker to pass\narbitrary pointers to a memcmp call, enabling them to read memory contents or\nenact a denial of service. In most cases, the attack requires the attacker to\nprovide both the certificate chain and CRL, neither of which need to have a\nvalid signature. If the attacker only controls one of these inputs, the other\ninput must already contain an X.400 address as a CRL distribution point, which\nis uncommon. As such, this vulnerability is most likely to only affect\napplications which have implemented their own functionality for retrieving CRLs\nover a network."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.4,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "7.4",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2023-50782",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-cryptography: Bleichenbacher timing oracle attack against RSA decryption - incomplete fix for CVE-2020-25659"
+              },
+              "fullDescription": {
+                "text": "A flaw was found in the python-cryptography package. This issue may allow a remote attacker to decrypt captured messages in TLS servers that use RSA key exchanges, which may lead to exposure of confidential or sensitive data."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2023-50782",
+              "help": {
+                "text": "Vulnerability CVE-2023-50782\nSeverity: HIGH\nPackage: cryptography\nFixed Version: 42.0.0\nLink: [CVE-2023-50782](https://avd.aquasec.com/nvd/cve-2023-50782)\nA flaw was found in the python-cryptography package. This issue may allow a remote attacker to decrypt captured messages in TLS servers that use RSA key exchanges, which may lead to exposure of confidential or sensitive data.",
+                "markdown": "**Vulnerability CVE-2023-50782**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|cryptography|42.0.0|[CVE-2023-50782](https://avd.aquasec.com/nvd/cve-2023-50782)|\n\nA flaw was found in the python-cryptography package. This issue may allow a remote attacker to decrypt captured messages in TLS servers that use RSA key exchanges, which may lead to exposure of confidential or sensitive data."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                "cvssv40_baseScore": 8.7,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-26007",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "cryptography: cryptography Subgroup Attack Due to Missing Subgroup Validation for SECT Curves"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to 46.0.5, the public_key_from_numbers (or EllipticCurvePublicNumbers.public_key()), EllipticCurvePublicNumbers.public_key(), load_der_public_key() and load_pem_public_key() functions do not verify that the point belongs to the expected prime-order subgroup of the curve. This missing validation allows an attacker to provide a public key point P from a small-order subgroup. This can lead to security issues in various situations, such as the most commonly used signature verification (ECDSA) and shared key negotiation (ECDH). When the victim computes the shared secret as S = [victim_private_key]P via ECDH, this leaks information about victim_private_key mod (small_subgroup_order). For curves with cofactor \u003e 1, this reveals the least significant bits of the private key. When these weak public keys are used in ECDSA , it's easy to forge signatures on the small subgroup. Only SECT curves are impacted by this. This vulnerability is fixed in 46.0.5."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-26007",
+              "help": {
+                "text": "Vulnerability CVE-2026-26007\nSeverity: HIGH\nPackage: cryptography\nFixed Version: 46.0.5\nLink: [CVE-2026-26007](https://avd.aquasec.com/nvd/cve-2026-26007)\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to 46.0.5, the public_key_from_numbers (or EllipticCurvePublicNumbers.public_key()), EllipticCurvePublicNumbers.public_key(), load_der_public_key() and load_pem_public_key() functions do not verify that the point belongs to the expected prime-order subgroup of the curve. This missing validation allows an attacker to provide a public key point P from a small-order subgroup. This can lead to security issues in various situations, such as the most commonly used signature verification (ECDSA) and shared key negotiation (ECDH). When the victim computes the shared secret as S = [victim_private_key]P via ECDH, this leaks information about victim_private_key mod (small_subgroup_order). For curves with cofactor \u003e 1, this reveals the least significant bits of the private key. When these weak public keys are used in ECDSA , it's easy to forge signatures on the small subgroup. Only SECT curves are impacted by this. This vulnerability is fixed in 46.0.5.",
+                "markdown": "**Vulnerability CVE-2026-26007**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|cryptography|46.0.5|[CVE-2026-26007](https://avd.aquasec.com/nvd/cve-2026-26007)|\n\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to 46.0.5, the public_key_from_numbers (or EllipticCurvePublicNumbers.public_key()), EllipticCurvePublicNumbers.public_key(), load_der_public_key() and load_pem_public_key() functions do not verify that the point belongs to the expected prime-order subgroup of the curve. This missing validation allows an attacker to provide a public key point P from a small-order subgroup. This can lead to security issues in various situations, such as the most commonly used signature verification (ECDSA) and shared key negotiation (ECDH). When the victim computes the shared secret as S = [victim_private_key]P via ECDH, this leaks information about victim_private_key mod (small_subgroup_order). For curves with cofactor \u003e 1, this reveals the least significant bits of the private key. When these weak public keys are used in ECDSA , it's easy to forge signatures on the small subgroup. Only SECT curves are impacted by this. This vulnerability is fixed in 46.0.5."
+              },
+              "properties": {
+                "cvssv40_baseScore": 8.2,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:H/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "8.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-537c-gmf6-5ccf",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "fullDescription": {
+                "text": "pyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in wheels prior to cryptograph 48.01 are vulnerable to a security issue. More details about the vulnerability itself can be found in https://openssl-library.org/news/secadv/20260609.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-537c-gmf6-5ccf",
+              "help": {
+                "text": "Vulnerability GHSA-537c-gmf6-5ccf\nSeverity: HIGH\nPackage: cryptography\nFixed Version: 48.0.1\nLink: [GHSA-537c-gmf6-5ccf](https://github.com/advisories/GHSA-537c-gmf6-5ccf)\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in wheels prior to cryptograph 48.01 are vulnerable to a security issue. More details about the vulnerability itself can be found in https://openssl-library.org/news/secadv/20260609.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions.",
+                "markdown": "**Vulnerability GHSA-537c-gmf6-5ccf**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|cryptography|48.0.1|[GHSA-537c-gmf6-5ccf](https://github.com/advisories/GHSA-537c-gmf6-5ccf)|\n\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in wheels prior to cryptograph 48.01 are vulnerable to a security issue. More details about the vulnerability itself can be found in https://openssl-library.org/news/secadv/20260609.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2023-23931",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-cryptography: memory corruption via immutable objects"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. In affected versions `Cipher.update_into` would accept Python objects which implement the buffer protocol, but provide only immutable buffers. This would allow immutable objects (such as `bytes`) to be mutated, thus violating fundamental rules of Python and resulting in corrupted output. This now correctly raises an exception. This issue has been present since `update_into` was originally introduced in cryptography 1.8."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2023-23931",
+              "help": {
+                "text": "Vulnerability CVE-2023-23931\nSeverity: MEDIUM\nPackage: cryptography\nFixed Version: 39.0.1\nLink: [CVE-2023-23931](https://avd.aquasec.com/nvd/cve-2023-23931)\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. In affected versions `Cipher.update_into` would accept Python objects which implement the buffer protocol, but provide only immutable buffers. This would allow immutable objects (such as `bytes`) to be mutated, thus violating fundamental rules of Python and resulting in corrupted output. This now correctly raises an exception. This issue has been present since `update_into` was originally introduced in cryptography 1.8.",
+                "markdown": "**Vulnerability CVE-2023-23931**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|cryptography|39.0.1|[CVE-2023-23931](https://avd.aquasec.com/nvd/cve-2023-23931)|\n\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. In affected versions `Cipher.update_into` would accept Python objects which implement the buffer protocol, but provide only immutable buffers. This would allow immutable objects (such as `bytes`) to be mutated, thus violating fundamental rules of Python and resulting in corrupted output. This now correctly raises an exception. This issue has been present since `update_into` was originally introduced in cryptography 1.8."
+              },
+              "properties": {
+                "cvssv3_baseScore": 6.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+                "cvssv40_baseScore": 6.9,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:L/VA:L/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "6.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2023-49083",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-cryptography: NULL-dereference when loading PKCS7 certificates"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Calling `load_pem_pkcs7_certificates` or `load_der_pkcs7_certificates` could lead to a NULL-pointer dereference and segfault. Exploitation of this vulnerability poses a serious risk of Denial of Service (DoS) for any application attempting to deserialize a PKCS7 blob/certificate. The consequences extend to potential disruptions in system availability and stability. This vulnerability has been patched in version 41.0.6."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2023-49083",
+              "help": {
+                "text": "Vulnerability CVE-2023-49083\nSeverity: MEDIUM\nPackage: cryptography\nFixed Version: 41.0.6\nLink: [CVE-2023-49083](https://avd.aquasec.com/nvd/cve-2023-49083)\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Calling `load_pem_pkcs7_certificates` or `load_der_pkcs7_certificates` could lead to a NULL-pointer dereference and segfault. Exploitation of this vulnerability poses a serious risk of Denial of Service (DoS) for any application attempting to deserialize a PKCS7 blob/certificate. The consequences extend to potential disruptions in system availability and stability. This vulnerability has been patched in version 41.0.6.",
+                "markdown": "**Vulnerability CVE-2023-49083**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|cryptography|41.0.6|[CVE-2023-49083](https://avd.aquasec.com/nvd/cve-2023-49083)|\n\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Calling `load_pem_pkcs7_certificates` or `load_der_pkcs7_certificates` could lead to a NULL-pointer dereference and segfault. Exploitation of this vulnerability poses a serious risk of Denial of Service (DoS) for any application attempting to deserialize a PKCS7 blob/certificate. The consequences extend to potential disruptions in system availability and stability. This vulnerability has been patched in version 41.0.6."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.9,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "5.9",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2024-0727",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "openssl: denial of service via null dereference"
+              },
+              "fullDescription": {
+                "text": "Issue summary: Processing a maliciously formatted PKCS12 file may lead OpenSSL\nto crash leading to a potential Denial of Service attack\n\nImpact summary: Applications loading files in the PKCS12 format from untrusted\nsources might terminate abruptly.\n\nA file in PKCS12 format can contain certificates and keys and may come from an\nuntrusted source. The PKCS12 specification allows certain fields to be NULL, but\nOpenSSL does not correctly check for this case. This can lead to a NULL pointer\ndereference that results in OpenSSL crashing. If an application processes PKCS12\nfiles from an untrusted source using the OpenSSL APIs then that application will\nbe vulnerable to this issue.\n\nOpenSSL APIs that are vulnerable to this are: PKCS12_parse(),\nPKCS12_unpack_p7data(), PKCS12_unpack_p7encdata(), PKCS12_unpack_authsafes()\nand PKCS12_newpass().\n\nWe have also fixed a similar issue in SMIME_write_PKCS7(). However since this\nfunction is related to writing data we do not consider it security significant.\n\nThe FIPS modules in 3.2, 3.1 and 3.0 are not affected by this issue."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2024-0727",
+              "help": {
+                "text": "Vulnerability CVE-2024-0727\nSeverity: MEDIUM\nPackage: cryptography\nFixed Version: 42.0.2\nLink: [CVE-2024-0727](https://avd.aquasec.com/nvd/cve-2024-0727)\nIssue summary: Processing a maliciously formatted PKCS12 file may lead OpenSSL\nto crash leading to a potential Denial of Service attack\n\nImpact summary: Applications loading files in the PKCS12 format from untrusted\nsources might terminate abruptly.\n\nA file in PKCS12 format can contain certificates and keys and may come from an\nuntrusted source. The PKCS12 specification allows certain fields to be NULL, but\nOpenSSL does not correctly check for this case. This can lead to a NULL pointer\ndereference that results in OpenSSL crashing. If an application processes PKCS12\nfiles from an untrusted source using the OpenSSL APIs then that application will\nbe vulnerable to this issue.\n\nOpenSSL APIs that are vulnerable to this are: PKCS12_parse(),\nPKCS12_unpack_p7data(), PKCS12_unpack_p7encdata(), PKCS12_unpack_authsafes()\nand PKCS12_newpass().\n\nWe have also fixed a similar issue in SMIME_write_PKCS7(). However since this\nfunction is related to writing data we do not consider it security significant.\n\nThe FIPS modules in 3.2, 3.1 and 3.0 are not affected by this issue.",
+                "markdown": "**Vulnerability CVE-2024-0727**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|cryptography|42.0.2|[CVE-2024-0727](https://avd.aquasec.com/nvd/cve-2024-0727)|\n\nIssue summary: Processing a maliciously formatted PKCS12 file may lead OpenSSL\nto crash leading to a potential Denial of Service attack\n\nImpact summary: Applications loading files in the PKCS12 format from untrusted\nsources might terminate abruptly.\n\nA file in PKCS12 format can contain certificates and keys and may come from an\nuntrusted source. The PKCS12 specification allows certain fields to be NULL, but\nOpenSSL does not correctly check for this case. This can lead to a NULL pointer\ndereference that results in OpenSSL crashing. If an application processes PKCS12\nfiles from an untrusted source using the OpenSSL APIs then that application will\nbe vulnerable to this issue.\n\nOpenSSL APIs that are vulnerable to this are: PKCS12_parse(),\nPKCS12_unpack_p7data(), PKCS12_unpack_p7encdata(), PKCS12_unpack_authsafes()\nand PKCS12_newpass().\n\nWe have also fixed a similar issue in SMIME_write_PKCS7(). However since this\nfunction is related to writing data we do not consider it security significant.\n\nThe FIPS modules in 3.2, 3.1 and 3.0 are not affected by this issue."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.5,
+                "cvssv3_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "5.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-34073",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-cryptography: Cryptography: Security bypass due to improper DNS name constraint validation"
+              },
+              "fullDescription": {
+                "text": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to version 46.0.6, DNS name constraints were only validated against SANs within child certificates, and not the \"peer name\" presented during each validation. Consequently, cryptography would allow a peer named bar.example.com to validate against a wildcard leaf certificate for *.example.com, even if the leaf's parent certificate (or upwards) contained an excluded subtree constraint for bar.example.com. This issue has been patched in version 46.0.6."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-34073",
+              "help": {
+                "text": "Vulnerability CVE-2026-34073\nSeverity: LOW\nPackage: cryptography\nFixed Version: 46.0.6\nLink: [CVE-2026-34073](https://avd.aquasec.com/nvd/cve-2026-34073)\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to version 46.0.6, DNS name constraints were only validated against SANs within child certificates, and not the \"peer name\" presented during each validation. Consequently, cryptography would allow a peer named bar.example.com to validate against a wildcard leaf certificate for *.example.com, even if the leaf's parent certificate (or upwards) contained an excluded subtree constraint for bar.example.com. This issue has been patched in version 46.0.6.",
+                "markdown": "**Vulnerability CVE-2026-34073**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|cryptography|46.0.6|[CVE-2026-34073](https://avd.aquasec.com/nvd/cve-2026-34073)|\n\ncryptography is a package designed to expose cryptographic primitives and recipes to Python developers. Prior to version 46.0.6, DNS name constraints were only validated against SANs within child certificates, and not the \"peer name\" presented during each validation. Consequently, cryptography would allow a peer named bar.example.com to validate against a wildcard leaf certificate for *.example.com, even if the leaf's parent certificate (or upwards) contained an excluded subtree constraint for bar.example.com. This issue has been patched in version 46.0.6."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.3,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+                "cvssv40_baseScore": 1.7,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N/E:U",
+                "precision": "very-high",
+                "security-severity": "5.3",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-5cpq-8wj7-hf2v",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "fullDescription": {
+                "text": "pyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 0.5-40.0.2 are vulnerable to a security issue. More details about the vulnerability itself can be found in https://www.openssl.org/news/secadv/20230530.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-5cpq-8wj7-hf2v",
+              "help": {
+                "text": "Vulnerability GHSA-5cpq-8wj7-hf2v\nSeverity: LOW\nPackage: cryptography\nFixed Version: 41.0.0\nLink: [GHSA-5cpq-8wj7-hf2v](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v)\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 0.5-40.0.2 are vulnerable to a security issue. More details about the vulnerability itself can be found in https://www.openssl.org/news/secadv/20230530.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions.",
+                "markdown": "**Vulnerability GHSA-5cpq-8wj7-hf2v**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|cryptography|41.0.0|[GHSA-5cpq-8wj7-hf2v](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v)|\n\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 0.5-40.0.2 are vulnerable to a security issue. More details about the vulnerability itself can be found in https://www.openssl.org/news/secadv/20230530.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "2.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-jm77-qphf-c4w8",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "pyca/cryptography's wheels include vulnerable OpenSSL"
+              },
+              "fullDescription": {
+                "text": "pyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 0.8-41.0.2 are vulnerable to several security issues. More details about the vulnerabilities themselves can be found in https://www.openssl.org/news/secadv/20230731.txt, https://www.openssl.org/news/secadv/20230719.txt, and https://www.openssl.org/news/secadv/20230714.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-jm77-qphf-c4w8",
+              "help": {
+                "text": "Vulnerability GHSA-jm77-qphf-c4w8\nSeverity: LOW\nPackage: cryptography\nFixed Version: 41.0.3\nLink: [GHSA-jm77-qphf-c4w8](https://github.com/advisories/GHSA-jm77-qphf-c4w8)\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 0.8-41.0.2 are vulnerable to several security issues. More details about the vulnerabilities themselves can be found in https://www.openssl.org/news/secadv/20230731.txt, https://www.openssl.org/news/secadv/20230719.txt, and https://www.openssl.org/news/secadv/20230714.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions.",
+                "markdown": "**Vulnerability GHSA-jm77-qphf-c4w8**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|cryptography|41.0.3|[GHSA-jm77-qphf-c4w8](https://github.com/advisories/GHSA-jm77-qphf-c4w8)|\n\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 0.8-41.0.2 are vulnerable to several security issues. More details about the vulnerabilities themselves can be found in https://www.openssl.org/news/secadv/20230731.txt, https://www.openssl.org/news/secadv/20230719.txt, and https://www.openssl.org/news/secadv/20230714.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "2.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-v8gr-m533-ghj9",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "Vulnerable OpenSSL included in cryptography wheels"
+              },
+              "fullDescription": {
+                "text": "pyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 2.5-41.0.3 are vulnerable to several security issues. More details about the vulnerabilities themselves can be found in https://www.openssl.org/news/secadv/20230908.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-v8gr-m533-ghj9",
+              "help": {
+                "text": "Vulnerability GHSA-v8gr-m533-ghj9\nSeverity: LOW\nPackage: cryptography\nFixed Version: 41.0.4\nLink: [GHSA-v8gr-m533-ghj9](https://github.com/advisories/GHSA-v8gr-m533-ghj9)\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 2.5-41.0.3 are vulnerable to several security issues. More details about the vulnerabilities themselves can be found in https://www.openssl.org/news/secadv/20230908.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions.",
+                "markdown": "**Vulnerability GHSA-v8gr-m533-ghj9**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|cryptography|41.0.4|[GHSA-v8gr-m533-ghj9](https://github.com/advisories/GHSA-v8gr-m533-ghj9)|\n\npyca/cryptography's wheels include a statically linked copy of OpenSSL. The versions of OpenSSL included in cryptography 2.5-41.0.3 are vulnerable to several security issues. More details about the vulnerabilities themselves can be found in https://www.openssl.org/news/secadv/20230908.txt.\n\nIf you are building cryptography source (\"sdist\") then you are responsible for upgrading your copy of OpenSSL. Only users installing from wheels built by the cryptography project (i.e., those distributed on PyPI) need to update their cryptography versions."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "2.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2018-18074",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-requests: Redirect from HTTPS to HTTP does not remove Authorization header"
+              },
+              "fullDescription": {
+                "text": "The Requests package before 2.20.0 for Python sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect, which makes it easier for remote attackers to discover credentials by sniffing the network."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2018-18074",
+              "help": {
+                "text": "Vulnerability CVE-2018-18074\nSeverity: HIGH\nPackage: requests\nFixed Version: 2.20.0\nLink: [CVE-2018-18074](https://avd.aquasec.com/nvd/cve-2018-18074)\nThe Requests package before 2.20.0 for Python sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect, which makes it easier for remote attackers to discover credentials by sniffing the network.",
+                "markdown": "**Vulnerability CVE-2018-18074**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|requests|2.20.0|[CVE-2018-18074](https://avd.aquasec.com/nvd/cve-2018-18074)|\n\nThe Requests package before 2.20.0 for Python sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect, which makes it easier for remote attackers to discover credentials by sniffing the network."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2023-32681",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "python-requests: Unintended leak of Proxy-Authorization header"
+              },
+              "fullDescription": {
+                "text": "Requests is a HTTP library. Since Requests 2.3.0, Requests has been leaking Proxy-Authorization headers to destination servers when redirected to an HTTPS endpoint. This is a product of how we use `rebuild_proxies` to reattach the `Proxy-Authorization` header to requests. For HTTP connections sent through the tunnel, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into the tunneled request. This results in Requests forwarding proxy credentials to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate sensitive information. This issue has been patched in version 2.31.0."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2023-32681",
+              "help": {
+                "text": "Vulnerability CVE-2023-32681\nSeverity: MEDIUM\nPackage: requests\nFixed Version: 2.31.0\nLink: [CVE-2023-32681](https://avd.aquasec.com/nvd/cve-2023-32681)\nRequests is a HTTP library. Since Requests 2.3.0, Requests has been leaking Proxy-Authorization headers to destination servers when redirected to an HTTPS endpoint. This is a product of how we use `rebuild_proxies` to reattach the `Proxy-Authorization` header to requests. For HTTP connections sent through the tunnel, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into the tunneled request. This results in Requests forwarding proxy credentials to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate sensitive information. This issue has been patched in version 2.31.0.",
+                "markdown": "**Vulnerability CVE-2023-32681**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|requests|2.31.0|[CVE-2023-32681](https://avd.aquasec.com/nvd/cve-2023-32681)|\n\nRequests is a HTTP library. Since Requests 2.3.0, Requests has been leaking Proxy-Authorization headers to destination servers when redirected to an HTTPS endpoint. This is a product of how we use `rebuild_proxies` to reattach the `Proxy-Authorization` header to requests. For HTTP connections sent through the tunnel, the proxy will identify the header in the request itself and remove it prior to forwarding to the destination server. However when sent over HTTPS, the `Proxy-Authorization` header must be sent in the CONNECT request as the proxy has no visibility into the tunneled request. This results in Requests forwarding proxy credentials to the destination server unintentionally, allowing a malicious actor to potentially exfiltrate sensitive information. This issue has been patched in version 2.31.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 6.1,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "6.1",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2024-35195",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "requests: subsequent requests to the same host ignore cert verification"
+              },
+              "fullDescription": {
+                "text": "Requests is a HTTP library. Prior to 2.32.0, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. This vulnerability is fixed in 2.32.0."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2024-35195",
+              "help": {
+                "text": "Vulnerability CVE-2024-35195\nSeverity: MEDIUM\nPackage: requests\nFixed Version: 2.32.0\nLink: [CVE-2024-35195](https://avd.aquasec.com/nvd/cve-2024-35195)\nRequests is a HTTP library. Prior to 2.32.0, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. This vulnerability is fixed in 2.32.0.",
+                "markdown": "**Vulnerability CVE-2024-35195**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|requests|2.32.0|[CVE-2024-35195](https://avd.aquasec.com/nvd/cve-2024-35195)|\n\nRequests is a HTTP library. Prior to 2.32.0, when making requests through a Requests `Session`, if the first request is made with `verify=False` to disable cert verification, all subsequent requests to the same host will continue to ignore cert verification regardless of changes to the value of `verify`. This behavior will continue for the lifecycle of the connection in the connection pool. This vulnerability is fixed in 2.32.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.6,
+                "cvssv3_vector": "CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N",
+                "precision": "very-high",
+                "security-severity": "5.6",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2024-47081",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "requests: Requests vulnerable to .netrc credentials leak via malicious URLs"
+              },
+              "fullDescription": {
+                "text": "Requests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2024-47081",
+              "help": {
+                "text": "Vulnerability CVE-2024-47081\nSeverity: MEDIUM\nPackage: requests\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)\nRequests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session.",
+                "markdown": "**Vulnerability CVE-2024-47081**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|requests|2.32.4|[CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)|\n\nRequests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.3,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "5.3",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-25645",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "requests: Requests: Security bypass due to predictable temporary file creation"
+              },
+              "fullDescription": {
+                "text": "Requests is a HTTP library. Prior to version 2.33.0, the `requests.utils.extract_zipped_paths()` utility function uses a predictable filename when extracting files from zip archives into the system temporary directory. If the target file already exists, it is reused without validation. A local attacker with write access to the temp directory could pre-create a malicious file that would be loaded in place of the legitimate one. Standard usage of the Requests library is not affected by this vulnerability. Only applications that call `extract_zipped_paths()` directly are impacted. Starting in version 2.33.0, the library extracts files to a non-deterministic location. If developers are unable to upgrade, they can set `TMPDIR` in their environment to a directory with restricted write access."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-25645",
+              "help": {
+                "text": "Vulnerability CVE-2026-25645\nSeverity: MEDIUM\nPackage: requests\nFixed Version: 2.33.0\nLink: [CVE-2026-25645](https://avd.aquasec.com/nvd/cve-2026-25645)\nRequests is a HTTP library. Prior to version 2.33.0, the `requests.utils.extract_zipped_paths()` utility function uses a predictable filename when extracting files from zip archives into the system temporary directory. If the target file already exists, it is reused without validation. A local attacker with write access to the temp directory could pre-create a malicious file that would be loaded in place of the legitimate one. Standard usage of the Requests library is not affected by this vulnerability. Only applications that call `extract_zipped_paths()` directly are impacted. Starting in version 2.33.0, the library extracts files to a non-deterministic location. If developers are unable to upgrade, they can set `TMPDIR` in their environment to a directory with restricted write access.",
+                "markdown": "**Vulnerability CVE-2026-25645**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|requests|2.33.0|[CVE-2026-25645](https://avd.aquasec.com/nvd/cve-2026-25645)|\n\nRequests is a HTTP library. Prior to version 2.33.0, the `requests.utils.extract_zipped_paths()` utility function uses a predictable filename when extracting files from zip archives into the system temporary directory. If the target file already exists, it is reused without validation. A local attacker with write access to the temp directory could pre-create a malicious file that would be loaded in place of the legitimate one. Standard usage of the Requests library is not affected by this vulnerability. Only applications that call `extract_zipped_paths()` directly are impacted. Starting in version 2.33.0, the library extracts files to a non-deterministic location. If developers are unable to upgrade, they can set `TMPDIR` in their environment to a directory with restricted write access."
+              },
+              "properties": {
+                "cvssv3_baseScore": 4.4,
+                "cvssv3_vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:H/A:N",
+                "precision": "very-high",
+                "security-severity": "4.4",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "jwt-token",
+              "name": "Secret",
+              "shortDescription": {
+                "text": "JWT token"
+              },
+              "fullDescription": {
+                "text": "CMDB_BEARER_TOKEN = \"**********************************************************************************************************************************************************\""
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://github.com/aquasecurity/trivy/blob/main/pkg/fanal/secret/builtin-rules.go",
+              "help": {
+                "text": "Secret JWT token\nSeverity: MEDIUM\nMatch: CMDB_BEARER_TOKEN = \"**********************************************************************************************************************************************************\"",
+                "markdown": "**Secret JWT token**\n| Severity | Match |\n| --- | --- |\n|MEDIUM|CMDB_BEARER_TOKEN = \"**********************************************************************************************************************************************************\"|"
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "5.5",
+                "tags": [
+                  "secret",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            }
+          ],
+          "version": "0.74.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2020-36242",
+          "ruleIndex": 0,
+          "level": "error",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2020-36242\nSeverity: HIGH\nFixed Version: 3.3.2\nLink: [CVE-2020-36242](https://avd.aquasec.com/nvd/cve-2020-36242)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2023-0286",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2023-0286\nSeverity: HIGH\nFixed Version: 39.0.1\nLink: [CVE-2023-0286](https://avd.aquasec.com/nvd/cve-2023-0286)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2023-50782",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2023-50782\nSeverity: HIGH\nFixed Version: 42.0.0\nLink: [CVE-2023-50782](https://avd.aquasec.com/nvd/cve-2023-50782)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-26007",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2026-26007\nSeverity: HIGH\nFixed Version: 46.0.5\nLink: [CVE-2026-26007](https://avd.aquasec.com/nvd/cve-2026-26007)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "GHSA-537c-gmf6-5ccf",
+          "ruleIndex": 4,
+          "level": "error",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability GHSA-537c-gmf6-5ccf\nSeverity: HIGH\nFixed Version: 48.0.1\nLink: [GHSA-537c-gmf6-5ccf](https://github.com/advisories/GHSA-537c-gmf6-5ccf)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2023-23931",
+          "ruleIndex": 5,
+          "level": "warning",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2023-23931\nSeverity: MEDIUM\nFixed Version: 39.0.1\nLink: [CVE-2023-23931](https://avd.aquasec.com/nvd/cve-2023-23931)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2023-49083",
+          "ruleIndex": 6,
+          "level": "warning",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2023-49083\nSeverity: MEDIUM\nFixed Version: 41.0.6\nLink: [CVE-2023-49083](https://avd.aquasec.com/nvd/cve-2023-49083)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2024-0727",
+          "ruleIndex": 7,
+          "level": "warning",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2024-0727\nSeverity: MEDIUM\nFixed Version: 42.0.2\nLink: [CVE-2024-0727](https://avd.aquasec.com/nvd/cve-2024-0727)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-34073",
+          "ruleIndex": 8,
+          "level": "note",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability CVE-2026-34073\nSeverity: LOW\nFixed Version: 46.0.6\nLink: [CVE-2026-34073](https://avd.aquasec.com/nvd/cve-2026-34073)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "GHSA-5cpq-8wj7-hf2v",
+          "ruleIndex": 9,
+          "level": "note",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability GHSA-5cpq-8wj7-hf2v\nSeverity: LOW\nFixed Version: 41.0.0\nLink: [GHSA-5cpq-8wj7-hf2v](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "GHSA-jm77-qphf-c4w8",
+          "ruleIndex": 10,
+          "level": "note",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability GHSA-jm77-qphf-c4w8\nSeverity: LOW\nFixed Version: 41.0.3\nLink: [GHSA-jm77-qphf-c4w8](https://github.com/advisories/GHSA-jm77-qphf-c4w8)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "GHSA-v8gr-m533-ghj9",
+          "ruleIndex": 11,
+          "level": "note",
+          "message": {
+            "text": "Package: cryptography\nInstalled Version: 3.2\nVulnerability GHSA-v8gr-m533-ghj9\nSeverity: LOW\nFixed Version: 41.0.4\nLink: [GHSA-v8gr-m533-ghj9](https://github.com/advisories/GHSA-v8gr-m533-ghj9)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: cryptography@3.2"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2018-18074",
+          "ruleIndex": 12,
+          "level": "error",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.19.1\nVulnerability CVE-2018-18074\nSeverity: HIGH\nFixed Version: 2.20.0\nLink: [CVE-2018-18074](https://avd.aquasec.com/nvd/cve-2018-18074)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 1,
+                  "endLine": 2,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: requests@2.19.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2023-32681",
+          "ruleIndex": 13,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.19.1\nVulnerability CVE-2023-32681\nSeverity: MEDIUM\nFixed Version: 2.31.0\nLink: [CVE-2023-32681](https://avd.aquasec.com/nvd/cve-2023-32681)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 1,
+                  "endLine": 2,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: requests@2.19.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2024-35195",
+          "ruleIndex": 14,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.19.1\nVulnerability CVE-2024-35195\nSeverity: MEDIUM\nFixed Version: 2.32.0\nLink: [CVE-2024-35195](https://avd.aquasec.com/nvd/cve-2024-35195)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 1,
+                  "endLine": 2,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: requests@2.19.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2024-47081",
+          "ruleIndex": 15,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.19.1\nVulnerability CVE-2024-47081\nSeverity: MEDIUM\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 1,
+                  "endLine": 2,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: requests@2.19.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-25645",
+          "ruleIndex": 16,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.19.1\nVulnerability CVE-2026-25645\nSeverity: MEDIUM\nFixed Version: 2.33.0\nLink: [CVE-2026-25645](https://avd.aquasec.com/nvd/cve-2026-25645)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2,
+                  "startColumn": 1,
+                  "endLine": 2,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/requirements.txt: requests@2.19.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "jwt-token",
+          "ruleIndex": 17,
+          "level": "warning",
+          "message": {
+            "text": "Artifact: lab5-canary/app/token_fixtures.py\nType: \nSecret JWT token\nSeverity: MEDIUM\nMatch: SAMPLE_JWT = \"***********************************************************************************************************************************************************\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/app/token_fixtures.py",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 3,
+                  "startColumn": 1,
+                  "endLine": 3,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/app/token_fixtures.py"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "jwt-token",
+          "ruleIndex": 17,
+          "level": "warning",
+          "message": {
+            "text": "Artifact: lab5-canary/config/cmdb_token.py\nType: \nSecret JWT token\nSeverity: MEDIUM\nMatch: CMDB_BEARER_TOKEN = \"**********************************************************************************************************************************************************\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "lab5-canary/config/cmdb_token.py",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 3,
+                  "startColumn": 1,
+                  "endLine": 3,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "lab5-canary/config/cmdb_token.py"
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits",
+      "originalUriBaseIds": {
+        "ROOTPATH": {
+          "uri": "file:///src/"
+        }
+      }
+    }
+  ]
+}
